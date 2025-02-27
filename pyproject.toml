@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ec_mlp"
+version = "1.0"
+description = "ec-MLP: Machine Learning Potential for ElectroChemistry"
+readme = "README.md"
+license = { file = ".license-header.txt" }
+
+[project.urls]
+Homepage = "https://github.com/ChiahsinChu/ec-MLP"
+
+[project.entry-points."deepmd"]
+modifier_dipole_charge_beta_args = "ec_mlp.utils.argcheck:modifier_dipole_charge_beta_args"
+modifier_dipole_charge_cpm_args = "ec_mlp.utils.argcheck:modifier_dipole_charge_cpm_args"
+modifier_dipole_charge_qeq_args = "ec_mlp.utils.argcheck:modifier_dipole_charge_qeq_args"
+
+[project.entry-points."deepmd.tf"]
+modifier_dipole_charge_beta = "ec_mlp.tf.modifier:DipoleChargeBetaModifier"
