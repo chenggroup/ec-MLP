@@ -19,7 +19,7 @@ dependencies = [
     "pytest",
     "pytest-cov",
     "scikit_learn",
-    "torch_dmff @ git+https://github.com/ChiahsinChu/torch-dmff.git",
+    "torch_dmff @ git+https://gitee.com/chiahsinchu/torch-dmff.git",
 ]
 
 [project.urls]
