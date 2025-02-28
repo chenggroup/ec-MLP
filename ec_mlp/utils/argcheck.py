@@ -10,6 +10,7 @@ def modifier_dipole_charge_beta_args():
     doc_sys_charge_map = f"The charge of real atoms. The list length should be the same as the {make_link('type_map', 'model/type_map')}"
     doc_ewald_h = "The grid spacing of the FFT grid. Unit is A"
     doc_ewald_beta = f"The splitting parameter of Ewald sum. Unit is A^{-1}"
+    doc_ewald_calculator = "The calculator for Ewald sum. Option: navie, jax, torch"
 
     return [
         Argument("model_name", str, optional=False, doc=doc_model_name),
@@ -19,6 +20,13 @@ def modifier_dipole_charge_beta_args():
         Argument("sys_charge_map", list[float], optional=False, doc=doc_sys_charge_map),
         Argument("ewald_beta", float, optional=True, default=0.4, doc=doc_ewald_beta),
         Argument("ewald_h", float, optional=True, default=1.0, doc=doc_ewald_h),
+        Argument(
+            "ewald_calculator",
+            str,
+            optional=True,
+            default="torch",
+            doc=doc_ewald_calculator,
+        ),
     ]
 
 
