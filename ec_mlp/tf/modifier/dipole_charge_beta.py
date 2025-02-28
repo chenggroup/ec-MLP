@@ -5,8 +5,8 @@ from deepmd.tf.common import select_idx_map
 from deepmd.tf.modifier.base_modifier import BaseModifier
 from deepmd.tf.modifier.dipole_charge import DipoleChargeModifier
 from deepmd.tf.utils.data import DeepmdData
-from dp_dmff.dmff.pme import CoulombForceModule
-from dp_dmff.dmff.utils import calc_grads
+from torch_dmff.pme import CoulombForceModule
+from torch_dmff.utils import calc_grads
 
 
 @BaseModifier.register("dipole_charge_beta")
