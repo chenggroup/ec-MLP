@@ -32,3 +32,6 @@ modifier_dipole_charge_beta_args = "ec_mlp.utils.argcheck:modifier_dipole_charge
 
 [project.entry-points."deepmd.tf"]
 modifier_dipole_charge_beta = "ec_mlp.tf.modifier:DipoleChargeBetaModifier"
+
+[project.entry-points."deepmd.pt"]
+modifier_dipole_charge = "ec_mlp.pt.modifier:DipoleChargeModifier"
