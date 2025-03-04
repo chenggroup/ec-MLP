@@ -7,7 +7,7 @@ DeepMD-kit plugin for ElectroChemical interfaces simulations.
 This plugin can be installed by:
 
 ```bash
-git clone https://gitee.com/chiahsinchu/ec-MLP.git
+git clone https://git.xmu.edu.cn/cheng-group/ec-MLP.git
 pip install ec-MLP
 ```
 
