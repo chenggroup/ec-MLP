@@ -11,11 +11,11 @@ from scipy import constants
 
 try:
     import torch
-    from torch_dmff.pme import CoulombForceModule
-    from torch_dmff.utils import calc_grads
+    from torch_admp.pme import CoulombForceModule
+    from torch_admp.utils import calc_grads
 except ImportError:
     warnings.warn(
-        "torch and torch_dmff is required for pt ewald_calculator of DipoleChargeBetaModifier",
+        "torch and torch_admp is required for pt ewald_calculator of DipoleChargeBetaModifier",
     )
 
 try:

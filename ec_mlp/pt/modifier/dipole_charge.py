@@ -5,8 +5,8 @@ import numpy as np
 import torch
 from deepmd.pt.modifier.base_modifier import BaseModifier
 from deepmd.pt.utils import env
-from torch_dmff.pme import CoulombForceModule
-from torch_dmff.utils import calc_grads
+from torch_admp.pme import CoulombForceModule
+from torch_admp.utils import calc_grads
 
 # todo: for debugging
 torch.backends.cuda.preferred_linalg_library("magma")
