@@ -4,17 +4,27 @@ DeepMD-kit plugin for ElectroChemical interfaces simulations.
 
 ## Installation
 
-This plugin can be installed by:
+This package should be used in combination with the `devel` branch of DeepMD-kit:
+
+```bash
+git clone -b devel https://github.com/deepmodeling/deepmd-kit.git
+```
+
+The plugin for python interface can be installed by:
 
 ```bash
 git clone https://git.xmu.edu.cn/cheng-group/ec-MLP.git
 pip install ec-MLP
 ```
 
-This package should be used in combination with a custom version of DeepMD-kit:
+For lammps interface, the plugin can be installed by:
 
 ```bash
-git clone -b devel-modifier-plugin https://github.com/ChiahsinChu/deepmd-kit.git
+cd source/lmp
+mkdir -p build && cd build
+# adapt LAMMPS_SOURCE_DIR and DEEPMD_SOURCE_DIR
+cmake -DLAMMPS_SOURCE_DIR=$LAMMPS_PREFIX/src -DDEEPMD_SOURCE_DIR=$deepmd_source_dir/source/lmp ..
+make
 ```
 
 ## Usage
@@ -43,3 +53,10 @@ When [training a DPLR model](https://docs.deepmodeling.com/projects/deepmd/en/st
 The `type` should be set as `dipole_charge_beta` to use the new calculators. The `ewald_calculator` can be set as `naive`, `jax` or `torch` to use the original CPU-based calculator, the jax-based calculator or the torch-based calculator, respectively.
 
 **Note: virial calculation has not been implemented in the torch-/jax-based calculators yet.**
+
+### `verlet/split` for DPLR
+
+```bash
+export LAMMPS_PLUGIN_PATH=/path/to/plugin:$LAMMPS_PLUGIN_PATH
+mpirun -np 5 -p 1 4 lmp_mpi -i input.lmp
+```
