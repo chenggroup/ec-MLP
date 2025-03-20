@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
 // clang-format off
 /* ----------------------------------------------------------------------
    LAMMPS - Large-scale Atomic/Molecular Massively Parallel Simulator
@@ -292,7 +293,7 @@ void VerletSplitDplr::setup(int flag)
     fprintf(screen,"Setting up Verlet/split run ...\n");
 
 
-  if (!master){ 
+  if (!master){
     force->kspace->setup();
   }else Verlet::setup(flag);
 }
@@ -363,7 +364,7 @@ void VerletSplitDplr::run(int n)
   for (int i = 0; i < n; i++) {
 
     ntimestep = ++update->ntimestep;
-    
+
     //error arises when meblock > 0 inherit integrate ,
     //so we use MPI_Send to solve the problem of meblock > 0 can't call ev_set()
     ev_set(ntimestep);
@@ -385,8 +386,8 @@ void VerletSplitDplr::run(int n)
     MPI_Bcast(&nflag,1,MPI_INT,0,block);
 
     neigh_comm(nflag,n_pre_exchange,n_pre_neighbor);
-    
-    
+
+
 
     // if reneighboring occurred, re-setup Rspace <-> Kspace comm params
     // comm Rspace atom coords to Kspace procs
@@ -464,7 +465,7 @@ void VerletSplitDplr::run(int n)
     if (master) {
       timer->stamp();
       if (n_post_force) modify->post_force(vflag);
-      
+
       modify->final_integrate();
       if (n_end_of_step) modify->end_of_step();
       timer->stamp(Timer::MODIFY);
@@ -500,7 +501,7 @@ void VerletSplitDplr::rk_setup()
   }
 
   // qsize = # of atoms owned by each master proc in block
-  
+
   if (master) {
     for(int i =1; i<= ratio;i++ )
     qsize[i] = atom_counts[i];}
@@ -534,7 +535,7 @@ void VerletSplitDplr::rk_setup()
   // one-time scatter of Rspace atom charges to Kspace proc
   int n;
   n = atom->nlocal;
-  MPI_Scatterv(master ? atom->q : nullptr, qsize, qdisp, MPI_DOUBLE, 
+  MPI_Scatterv(master ? atom->q : nullptr, qsize, qdisp, MPI_DOUBLE,
               atom->q, n, MPI_DOUBLE, 0, block);
 
 }
@@ -544,7 +545,7 @@ void VerletSplitDplr::neigh_comm(int nflag,int n_pre_exchange,int n_pre_neighbor
       int sortflag;
       bigint ntimestep;
 
-      
+
 
       ntimestep = update->ntimestep;
 
@@ -569,24 +570,24 @@ void VerletSplitDplr::neigh_comm(int nflag,int n_pre_exchange,int n_pre_neighbor
             comm->exchange();
             if (sortflag && ntimestep >= atom->nextsort) atom->sort();
           }
-          
-          //box information communication 
+
+          //box information communication
           // send box bounds from Rspace to Kspace if simulation box is dynamic
           if (domain->box_change||ntimestep==1||ntimestep==2){
 
             MPI_Bcast(domain->boxlo, 3, MPI_DOUBLE, 0, block);
             MPI_Bcast(domain->boxhi, 3, MPI_DOUBLE, 0, block);
-            
-            if(!master){          
+
+            if(!master){
               domain->set_global_box();
               domain->set_local_box();}
-            
+
             setup_kspace_bins(kspace_sublo_list,kspace_subhi_list,sortbin_lo, sortbin_hi);
           }
-        
+
           //sort atoms by kspace bins
           resort_rspace_atom(sortbin_lo, sortbin_hi);
-          
+
           if(master){
             comm->borders();
             if (triclinic) domain->lamda2x(atom->nlocal+atom->nghost);
@@ -600,7 +601,7 @@ void VerletSplitDplr::neigh_comm(int nflag,int n_pre_exchange,int n_pre_neighbor
   // send eflag,vflag from Rspace to Kspace
   MPI_Bcast(&eflag,1,MPI_INT,0,block);
   MPI_Bcast(&vflag,1,MPI_INT,0,block);
-  
+
 }
 
 /* ----------------------------------------------------------------------
@@ -612,11 +613,11 @@ void VerletSplitDplr::neigh_comm(int nflag,int n_pre_exchange,int n_pre_neighbor
 void VerletSplitDplr::r2k_comm()
 {
   int n = 0;
-  
+
   n = atom->nlocal;
-  MPI_Scatterv(master ? atom->x[0] : nullptr, xsize, xdisp, MPI_DOUBLE, 
+  MPI_Scatterv(master ? atom->x[0] : nullptr, xsize, xdisp, MPI_DOUBLE,
               atom->x[0], n * 3, MPI_DOUBLE, 0, block);
-  
+
   if (domain->box_change && !master) force->kspace->setup();
 
 }
@@ -636,7 +637,7 @@ void VerletSplitDplr::k2r_comm()
   if (vflag) MPI_Bcast(force->kspace->virial,6,MPI_DOUBLE,1,block);
 
   if(!force->kspace_match("pppm/dplr", 1)){
-  
+
   // force!!!
   MPI_Gatherv(atom->f[0],n*3,MPI_DOUBLE,f_kspace[0],xsize,xdisp,
               MPI_DOUBLE,0,block);
@@ -649,7 +650,7 @@ void VerletSplitDplr::k2r_comm()
       f[i][1] += f_kspace[i][1];
       f[i][2] += f_kspace[i][2];
     }
-  }}else{ 
+  }}else{
     PPPMDPLR *pppm_dplr = (PPPMDPLR *)force->kspace_match("pppm/dplr", 1);
     if (!pppm_dplr) {
         error->all(FLERR, "Invalid KSpace style for pppm/dplr");
@@ -658,7 +659,7 @@ void VerletSplitDplr::k2r_comm()
 
     MPI_Gatherv(fe,n*3,MPI_DOUBLE,f_kspace[0],xsize,xdisp,
               MPI_DOUBLE,0,block);
-   
+
     if (master) {
     int nlocal = atom->nlocal;
     for (int i = 0; i < nlocal; i++) {
@@ -713,9 +714,9 @@ void VerletSplitDplr::setup_kspace_bins(
         // Take the intersection of Kspace subdomain boundaries with Rspace subdomain
         sortbin_lo[dim][i] = MAX(kspace_sublo_list[i][dim], domain->sublo[dim]);
         sortbin_hi[dim][i] = MIN(kspace_subhi_list[i][dim], domain->subhi[dim]);
-      
-      
-      
+
+
+
       }
     }
   }
@@ -734,7 +735,7 @@ void VerletSplitDplr::resort_rspace_atom(double **sortbin_lo, double **sortbin_h
   int nmax = atom->nmax;
   double **x = atom->x;
   AtomVec *avec = atom->avec;
-  
+
   // Ensure 'next' and 'permute' arrays are large enough
   if (nlocal > maxnext) {
     memory->destroy(next);
