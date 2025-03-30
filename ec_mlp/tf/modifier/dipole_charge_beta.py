@@ -2,6 +2,7 @@
 import warnings
 
 import numpy as np
+from deepmd.pt.utils.utils import to_numpy_array
 from deepmd.tf.common import select_idx_map
 from deepmd.tf.infer.ewald_recp import EwaldRecp
 from deepmd.tf.modifier.base_modifier import BaseModifier
@@ -65,7 +66,7 @@ class DipoleChargeBetaModifier(DipoleChargeModifier):
             pass
         elif ewald_calculator == "torch":
             self.er = CoulombForceModule(
-                rcut=5.0,
+                rcut=self.rcut,
                 rspace=False,
                 kappa=ewald_beta,
                 spacing=ewald_h,
@@ -135,10 +136,19 @@ class DipoleChargeBetaModifier(DipoleChargeModifier):
             self.placeholder_buffer_scales,
             {"charge": t_charges},
         )
-        e = self.er.reciprocal_energy.item()
-        f = -calc_grads(self.er.reciprocal_energy, t_positions).detach().cpu().numpy()
-        v = -calc_grads(self.er.reciprocal_energy, t_box).detach().cpu().numpy()
-        return e, f, box.reshape(3, 3).T @ v
+
+        e = (
+            self.er.reciprocal_energy
+            + self.er.non_neutral_energy
+            + self.er.slab_corr_energy
+        )
+        f = -calc_grads(e, t_positions)
+        v = -calc_grads(e, t_box)
+        return (
+            to_numpy_array(e),
+            to_numpy_array(f),
+            box.reshape(3, 3).T @ to_numpy_array(v),
+        )
 
     def eval(
         self,
