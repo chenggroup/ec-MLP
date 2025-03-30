@@ -27,11 +27,12 @@ Homepage = "https://github.com/ChiahsinChu/ec-MLP"
 
 [project.entry-points."deepmd"]
 modifier_dipole_charge_beta_args = "ec_mlp.utils.argcheck:modifier_dipole_charge_beta_args"
-# modifier_dipole_charge_cpm_args = "ec_mlp.utils.argcheck:modifier_dipole_charge_cpm_args"
+modifier_dipole_charge_electrode_args = "ec_mlp.utils.argcheck:modifier_dipole_charge_electrode_args"
 # modifier_dipole_charge_qeq_args = "ec_mlp.utils.argcheck:modifier_dipole_charge_qeq_args"
 
 [project.entry-points."deepmd.tf"]
 modifier_dipole_charge_beta = "ec_mlp.tf.modifier:DipoleChargeBetaModifier"
+modifier_dipole_charge_electrode = "ec_mlp.tf.modifier:DipoleChargeElectrodeModifier"
 
 [project.entry-points."deepmd.pt"]
 modifier_dipole_charge = "ec_mlp.pt.modifier:DipoleChargeModifier"
