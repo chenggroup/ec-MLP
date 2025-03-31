@@ -19,8 +19,10 @@ dependencies = [
     "pytest",
     "pytest-cov",
     "scikit_learn",
-    "torch_admp @ git+https://gitee.com/chiahsinchu/torch-admp.git",
 ]
+
+[project.optional-dependencies]
+torch_admp = ["torch_admp @ git+https://github.com/chiahsinchu/torch-admp.git"]
 
 [project.urls]
 Homepage = "https://github.com/ChiahsinChu/ec-MLP"
@@ -36,3 +38,6 @@ modifier_dipole_charge_electrode = "ec_mlp.tf.modifier:DipoleChargeElectrodeModi
 
 [project.entry-points."deepmd.pt"]
 modifier_dipole_charge = "ec_mlp.pt.modifier:DipoleChargeModifier"
+
+[tool.setuptools]
+packages = ["ec_mlp"]
