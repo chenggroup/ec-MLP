@@ -55,7 +55,7 @@ VerletSplitDplr::VerletSplitDplr(LAMMPS *lmp, int narg, char **arg) :
   if (universe->procs_per_world[1] % universe->procs_per_world[0])
     error->universe_all(FLERR,"Verlet/split/dplr requires Kspace partition "
                         "size be multiple of Rspace partition size");
-  if (comm->style != 0)
+  if (comm->style != Comm::BRICK)
     error->universe_all(FLERR,"Verlet/split/dplr can only currently be used with comm_style brick");
 
   // master = 1 for Rspace procs, 0 for Kspace procs
@@ -255,7 +255,7 @@ VerletSplitDplr::~VerletSplitDplr()
 
 void VerletSplitDplr::init()
 {
-  if (comm->style != 0)
+  if (comm->style != Comm::BRICK)
     error->universe_all(FLERR,"Verlet/split can only currently be used with comm_style brick");
   if (!force->kspace && comm->me == 0)
     error->warning(FLERR,"A KSpace style must be defined with verlet/split");
