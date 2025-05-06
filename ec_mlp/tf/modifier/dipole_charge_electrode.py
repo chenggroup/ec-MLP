@@ -87,7 +87,7 @@ class DipoleChargeElectrodeModifier(DipoleChargeModifier):
             t_positions.shape[0],
             [
                 LAMMPSElectrodeConstraint(
-                    indices=np.where(charges.reshape(-1) < 1e-5)[0],
+                    indices=np.where(np.abs(charges.reshape(-1)) < 1e-5)[0],
                     value=-charges.sum(),
                     mode="conq",
                     eta=self.eta,
@@ -95,7 +95,6 @@ class DipoleChargeElectrodeModifier(DipoleChargeModifier):
             ],
             symm=False,
         )
-
         _q_opt, efield = charge_optimisation(
             self.calculator,
             t_positions,
@@ -106,10 +105,8 @@ class DipoleChargeElectrodeModifier(DipoleChargeModifier):
             buffer_scales,
             *input_data,
         )
-
         q_opt = t_charges.clone()
         q_opt[input_data[0]] = _q_opt
-
         self.er(
             t_positions,
             t_box,
