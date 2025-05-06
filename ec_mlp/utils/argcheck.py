@@ -39,7 +39,6 @@ def modifier_dipole_charge_electrode_args():
     doc_ewald_beta = f"The splitting parameter of Ewald sum. Unit is A^{-1}"
     doc_eta = "The inverse width of the Gaussian function for polarisable electrode. Unit is A^{-1}"
     doc_slab_corr = "Whether to use slab correction for the polarisable electrode"
-    print("Registering dipole_charge_electrode plugin,test")
     return [
         Argument("model_name", str, optional=False, doc=doc_model_name),
         Argument(
