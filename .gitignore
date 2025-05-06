@@ -210,3 +210,5 @@ cython_debug/
 .vscode/
 
 example/
+
+source/tests

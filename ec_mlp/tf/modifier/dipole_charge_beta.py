@@ -53,12 +53,14 @@ class DipoleChargeBetaModifier(DipoleChargeModifier):
         ewald_h: float = 1,
         ewald_beta: float = 1,
         ewald_calculator: str = "torch",
+        slab_corr: bool = False,
     ) -> None:
         """Constructor."""
         super().__init__(
             model_name, model_charge_map, sys_charge_map, ewald_h, ewald_beta
         )
         self.ewald_calculator = ewald_calculator
+        self.slab_corr = slab_corr
 
         if ewald_calculator == "naive":
             self.er = EwaldRecp(ewald_h, ewald_beta)
@@ -70,6 +72,7 @@ class DipoleChargeBetaModifier(DipoleChargeModifier):
                 rspace=False,
                 kappa=ewald_beta,
                 spacing=ewald_h,
+                slab_corr=slab_corr,
             )
             self.placeholder_pairs = torch.ones(1, 2).to(torch.long)
             self.placeholder_ds = torch.ones(1)
@@ -125,6 +128,11 @@ class DipoleChargeBetaModifier(DipoleChargeModifier):
         charges: np.ndarray,
         box: np.ndarray,
     ):
+        slab_factor = 3.0
+        if self.slab_corr:
+            box = box.reshape(3, 3)
+            box[2, 2] *= slab_factor
+
         t_positions = torch.tensor(positions.reshape(-1, 3), requires_grad=True)
         t_box = torch.tensor(box.reshape(3, 3), requires_grad=True)
         t_charges = torch.tensor(charges.reshape(-1))
@@ -156,6 +164,7 @@ class DipoleChargeBetaModifier(DipoleChargeModifier):
         box: np.ndarray,
         atype: np.ndarray,
         eval_fv: bool = True,
+        modified_charge: np.ndarray = None,
     ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         """Evaluate the modification.
 
@@ -196,7 +205,13 @@ class DipoleChargeBetaModifier(DipoleChargeModifier):
 
         # add wfcc
         all_coord, all_charge, dipole = self._extend_system(coord, box, atype, charge)
-
+        # todo: modified_charge is experimental feature!!! will be replaced by integrated polarisable electrode
+        if modified_charge is not None:
+            all_charge = all_charge.reshape(-1)
+            all_charge[np.where(np.abs(all_charge).reshape(-1) < 1e-10)[0]] = (
+                modified_charge.reshape(-1)
+            )
+            all_charge = all_charge.reshape([nframes, -1])
         # print('compute er')
         tot_e = []
         all_f = []
