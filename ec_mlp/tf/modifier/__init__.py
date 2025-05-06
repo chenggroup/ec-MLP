@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
-# tf should be import first to avoid circular import
+# import first to avoid circular import
 from deepmd import tf  # noqa: F401
 
 from .dipole_charge_beta import DipoleChargeBetaModifier
