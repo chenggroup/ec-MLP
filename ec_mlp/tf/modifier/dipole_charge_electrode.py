@@ -95,7 +95,7 @@ class DipoleChargeElectrodeModifier(DipoleChargeModifier):
             ],
             symm=False,
         )
-        _q_opt, efield = charge_optimisation(
+        _q_opt, _efield = charge_optimisation(
             self.calculator,
             t_positions,
             t_box,
