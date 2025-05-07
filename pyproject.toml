@@ -39,5 +39,6 @@ modifier_dipole_charge_electrode = "ec_mlp.tf.modifier.dipole_charge_electrode:D
 [project.entry-points."deepmd.pt"]
 modifier_dipole_charge = "ec_mlp.pt.modifier.dipole_charge:DipoleChargeModifier"
 
-[tool.setuptools]
-packages = ["ec_mlp"]
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["ec_mlp"]
