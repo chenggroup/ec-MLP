@@ -23,6 +23,14 @@ dependencies = [
 
 [project.optional-dependencies]
 torch_admp = ["torch_admp @ git+https://github.com/chiahsinchu/torch-admp.git"]
+test = [
+    "pytest",
+    "pytest-cov",
+    "openmm>=7.7.0",
+    "jax>=0.4.1, <=0.4.20",
+    "jaxlib>=0.4.1, <=0.4.20",
+    "DMFF @ git+https://github.com/ChiahsinChu/DMFF.git@devel",
+]
 
 [project.urls]
 Homepage = "https://github.com/ChiahsinChu/ec-MLP"
@@ -37,8 +45,8 @@ modifier_dipole_charge_electrode_args = "ec_mlp.utils.argcheck:modifier_dipole_c
 modifier_dipole_charge_beta = "ec_mlp.tf.modifier.dipole_charge_beta:DipoleChargeBetaModifier"
 modifier_dipole_charge_electrode = "ec_mlp.tf.modifier.dipole_charge_electrode:DipoleChargeElectrodeModifier"
 
-[project.entry-points."deepmd.pt"]
-modifier_dipole_charge = "ec_mlp.pt.modifier.dipole_charge:DipoleChargeModifier"
+# [project.entry-points."deepmd.pt"]
+# modifier_dipole_charge = "ec_mlp.pt.modifier.dipole_charge:DipoleChargeModifier"
 
 # https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
 [tool.setuptools.packages.find]

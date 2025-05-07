@@ -5,6 +5,7 @@ from pathlib import Path
 
 from deepmd.pt.entrypoints.main import train as pt_train
 from deepmd.tf.entrypoints.train import train as tf_train
+from deepmd.tf.env import tf
 
 
 class TFDPTrain:
@@ -28,6 +29,7 @@ class TFDPTrain:
             output=output_file,
             log_path=None,
         )
+        tf.reset_default_graph()
         os.chdir(root_dir)
 
 

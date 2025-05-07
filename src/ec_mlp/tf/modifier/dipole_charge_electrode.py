@@ -12,10 +12,9 @@ from torch_admp.electrode import (
     charge_optimization,
     setup_from_lammps,
 )
+from torch_admp.nblist import vesin_nblist
 from torch_admp.pme import CoulombForceModule
 from torch_admp.utils import calc_grads
-
-from ec_mlp.pt.utils.nblist import dp_nblist
 
 
 @BaseModifier.register("dipole_charge_electrode")
@@ -77,8 +76,8 @@ class DipoleChargeElectrodeModifier(DipoleChargeModifier):
         t_box = torch.tensor(box.reshape(3, 3), requires_grad=True)
         t_charges = torch.tensor(charges.reshape(-1))
 
-        print(self.nnei, self.rcut)
-        pairs, ds, buffer_scales = dp_nblist(t_positions, t_box, self.nnei, self.rcut)
+        pairs, ds, buffer_scales = vesin_nblist(t_positions, t_box, self.rcut)
+        # pairs, ds, buffer_scales = dp_nblist(t_positions, t_box, self.nnei, self.rcut)
 
         # mask, eta, chi, hardness, constraint_matrix, constraint_vals, ffield_electrode_mask, ffield_potential
         input_data = setup_from_lammps(

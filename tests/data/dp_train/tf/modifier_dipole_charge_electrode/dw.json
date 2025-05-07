@@ -10,7 +10,7 @@
     "descriptor": {
       "type": "se_a",
       "rcut_smth": 0.5,
-      "rcut": 4.0,
+      "rcut": 3.0,
       "neuron": [
         25,
         50,

@@ -5,8 +5,7 @@ from pathlib import Path
 import numpy as np
 import torch
 from ase import io
-
-from ec_mlp.pt.utils.nblist import dp_nblist, sort_pairs, vesin_nblist
+from torch_admp.nblist import dp_nblist, sort_pairs, vesin_nblist
 
 
 class TestNBList(unittest.TestCase):
