@@ -11,7 +11,7 @@
         92
       ],
       "rcut_smth": 0.5,
-      "rcut": 6.00,
+      "rcut": 6.0,
       "neuron": [
         16,
         32,
@@ -45,8 +45,8 @@
         6,
         1
       ],
-      "ewald_h": 1.00,
-      "ewald_beta": 0.40
+      "ewald_h": 1.0,
+      "ewald_beta": 0.4
     },
     "_comment4": " that's all"
   },

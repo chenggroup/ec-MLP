@@ -8,13 +8,14 @@ from deepmd.tf.modifier.dipole_charge import DipoleChargeModifier
 from deepmd.tf.utils.data import DeepmdData
 from torch_admp.electrode import (
     LAMMPSElectrodeConstraint,
-    PolarisableElectrode,
-    charge_optimisation,
+    PolarizableElectrode,
+    charge_optimization,
     setup_from_lammps,
 )
-from torch_admp.nblist import TorchNeighborList
 from torch_admp.pme import CoulombForceModule
 from torch_admp.utils import calc_grads
+
+from ec_mlp.pt.utils.nblist import dp_nblist
 
 
 @BaseModifier.register("dipole_charge_electrode")
@@ -47,7 +48,7 @@ class DipoleChargeElectrodeModifier(DipoleChargeModifier):
         super().__init__(
             model_name, model_charge_map, sys_charge_map, ewald_h, ewald_beta
         )
-        self.calculator = PolarisableElectrode(
+        self.calculator = PolarizableElectrode(
             rcut=self.rcut,
             kappa=ewald_beta,
             spacing=ewald_h,
@@ -60,8 +61,6 @@ class DipoleChargeElectrodeModifier(DipoleChargeModifier):
             spacing=ewald_h,
             slab_corr=slab_corr,
         )
-        # todo: replace TorchNeighborList with other nblist
-        self.nblist = TorchNeighborList(cutoff=self.rcut)
         self.eta = eta
 
     def _eval_polarisable_electrode(
@@ -78,9 +77,8 @@ class DipoleChargeElectrodeModifier(DipoleChargeModifier):
         t_box = torch.tensor(box.reshape(3, 3), requires_grad=True)
         t_charges = torch.tensor(charges.reshape(-1))
 
-        pairs = self.nblist(t_positions, t_box)
-        ds = self.nblist.get_ds()
-        buffer_scales = self.nblist.get_buffer_scales()
+        print(self.nnei, self.rcut)
+        pairs, ds, buffer_scales = dp_nblist(t_positions, t_box, self.nnei, self.rcut)
 
         # mask, eta, chi, hardness, constraint_matrix, constraint_vals, ffield_electrode_mask, ffield_potential
         input_data = setup_from_lammps(
@@ -95,7 +93,7 @@ class DipoleChargeElectrodeModifier(DipoleChargeModifier):
             ],
             symm=False,
         )
-        _q_opt, _efield = charge_optimisation(
+        _q_opt, _efield = charge_optimization(
             self.calculator,
             t_positions,
             t_box,
@@ -104,6 +102,7 @@ class DipoleChargeElectrodeModifier(DipoleChargeModifier):
             ds,
             buffer_scales,
             *input_data,
+            method="matinv",
         )
         q_opt = t_charges.clone()
         q_opt[input_data[0]] = _q_opt
