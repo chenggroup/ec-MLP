@@ -27,18 +27,20 @@ torch_admp = ["torch_admp @ git+https://github.com/chiahsinchu/torch-admp.git"]
 [project.urls]
 Homepage = "https://github.com/ChiahsinChu/ec-MLP"
 
+# https://docs.deepmodeling.com/projects/deepmd/en/stable/development/create-a-model-tf.html
+# https://docs.deepmodeling.com/projects/deepmd/en/stable/development/create-a-model-pt.html
 [project.entry-points."deepmd"]
 modifier_dipole_charge_beta_args = "ec_mlp.utils.argcheck:modifier_dipole_charge_beta_args"
 modifier_dipole_charge_electrode_args = "ec_mlp.utils.argcheck:modifier_dipole_charge_electrode_args"
 # modifier_dipole_charge_qeq_args = "ec_mlp.utils.argcheck:modifier_dipole_charge_qeq_args"
 
-# [project.entry-points."deepmd.tf"]
 modifier_dipole_charge_beta = "ec_mlp.tf.modifier.dipole_charge_beta:DipoleChargeBetaModifier"
 modifier_dipole_charge_electrode = "ec_mlp.tf.modifier.dipole_charge_electrode:DipoleChargeElectrodeModifier"
 
 [project.entry-points."deepmd.pt"]
 modifier_dipole_charge = "ec_mlp.pt.modifier.dipole_charge:DipoleChargeModifier"
 
+# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["ec_mlp"]

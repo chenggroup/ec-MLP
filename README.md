@@ -28,8 +28,3 @@ cmake -DLAMMPS_SOURCE_DIR=$LAMMPS_PREFIX/src \
       ..
 make
 ```
-
-## Modules
-
-- [`dipole_charge` modifier with multiple backends](./doc/dipole_charge_beta.md)
-- [`verlet/split/dplr` for MD acceleration](./doc/lmp/verlet_split_mlp.md)

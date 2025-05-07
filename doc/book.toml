@@ -1,0 +1,13 @@
+[book]
+authors = ["Jia-Xin Zhu"]
+language = "en"
+src = "src"
+title = "ec-MLP documentation"
+description = "ec-MLP documentation"
+
+[rust]
+edition = "2018"
+
+[build]
+build-dir = "ec-mlp-doc"
+create-missing = false
