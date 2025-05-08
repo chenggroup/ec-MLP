@@ -67,6 +67,7 @@ class DipoleChargeElectrodeModifier(DipoleChargeModifier):
         positions: np.ndarray,
         charges: np.ndarray,
         box: np.ndarray,
+        electrode: bool = True,
     ):
         if self.calculator.slab_corr:
             box = box.reshape(3, 3)
@@ -104,7 +105,8 @@ class DipoleChargeElectrodeModifier(DipoleChargeModifier):
             method="matinv",
         )
         q_opt = t_charges.clone()
-        q_opt[input_data[0]] = _q_opt
+        if electrode:
+            q_opt[input_data[0]] = _q_opt
         self.er(
             t_positions,
             t_box,
@@ -133,6 +135,7 @@ class DipoleChargeElectrodeModifier(DipoleChargeModifier):
         box: np.ndarray,
         atype: np.ndarray,
         eval_fv: bool = True,
+        electrode: bool = True,
     ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         """Evaluate the modification.
 
@@ -180,7 +183,10 @@ class DipoleChargeElectrodeModifier(DipoleChargeModifier):
         all_v = []
         for ii in range(nframes):
             e, f, v = self._eval_polarisable_electrode(
-                all_coord[ii], all_charge[ii], box[ii]
+                all_coord[ii],
+                all_charge[ii],
+                box[ii],
+                electrode,
             )
             tot_e.append(e)
             all_f.append(f)

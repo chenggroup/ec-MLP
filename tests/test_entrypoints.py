@@ -29,7 +29,6 @@ class TFDPTrain:
             output=output_file,
             log_path=None,
         )
-        tf.reset_default_graph()
         os.chdir(root_dir)
 
 
@@ -60,10 +59,16 @@ class TestDipoleChargeBetaModifier(TFDPTrain, unittest.TestCase):
     def setUp(self) -> None:
         self.dname = "data/dp_train/tf/modifier_dipole_charge_beta"
 
+    def tearDown(self) -> None:
+        tf.reset_default_graph()
+
 
 class TestDipoleChargeElectrodeModifier(TFDPTrain, unittest.TestCase):
     def setUp(self) -> None:
         self.dname = "data/dp_train/tf/modifier_dipole_charge_electrode"
+
+    def tearDown(self) -> None:
+        tf.reset_default_graph()
 
 
 if __name__ == "__main__":
