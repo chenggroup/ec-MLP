@@ -53,7 +53,7 @@ dump_modify     TRAJ element O H X sort id
 
 timestep        ${DT}
 
-add_run_style   verlet/split/kspace
-run_style       verlet/split/kspace
+add_run_style   verlet/split/dplr
+run_style       verlet/split/dplr
 
 run             ${NSTEPS}
