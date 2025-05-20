@@ -55,8 +55,8 @@ else()
   endif()
 endif()
 
-# C++11 is required
-set(CMAKE_CXX_STANDARD 11)
+# C++17 is required
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Need -restrict with Intel compilers
@@ -70,28 +70,21 @@ if(NOT LAMMPS_DIR)
   include(LAMMPSInterfaceCXX)
 endif()
 
-set(libname "mylmpplugin")
+set(libname "ecmlpplugin")
 file(GLOB LMP_SRC ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 add_library(${libname} MODULE ${LMP_SRC})
 target_link_libraries(${libname} PRIVATE lammps)
 target_include_directories(
   ${libname}
   PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/..
-          ${LAMMPS_SOURCE_DIR}/PLUGIN ${DEEPMD_SOURCE_DIR} ${LAMMPS_SOURCE_DIR}
-          ${LAMMPS_SOURCE_DIR}/KSPACE)
+          ${LAMMPS_SOURCE_DIR} ${LAMMPS_SOURCE_DIR}/PLUGIN  
+          ${LAMMPS_SOURCE_DIR}/KSPACE ${LAMMPS_SOURCE_DIR}/ELECTRODE
+          ${DEEPMD_SOURCE_DIR})
 set_target_properties(${libname} PROPERTIES PREFIX "" SUFFIX ".so")
 message("${LAMMPS_SOURCE_DIR}")
 
 # ##############################################################################
 # building the plugins
-
-# add_library(testscalaratomplugin MODULE
-# ${CMAKE_CURRENT_SOURCE_DIR}/compute_test_scalar_atom.cpp) #
-# target_include_directories(morse2plugin PRIVATE "${LAMMPS_HEADER_DIR}/OPENMP")
-# target_link_libraries(testscalaratomplugin PRIVATE lammps)
-# set_target_properties(testscalaratomplugin PROPERTIES PREFIX "" SUFFIX ".so")
-# # set_target_properties(morse2plugin nve2plugin helloplugin zero2plugin
-# PROPERTIES PREFIX "" SUFFIX ".so")
 
 # MacOS seems to need this
 if(CMAKE_SYSTEM_NAME STREQUAL Darwin)

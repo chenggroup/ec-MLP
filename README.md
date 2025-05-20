@@ -20,7 +20,7 @@ pip install ec-MLP
 For lammps interface, the plugin can be installed by:
 
 ```bash
-cd source/lmp
+cd src/lmp
 mkdir -p build && cd build
 # adapt LAMMPS_SOURCE_DIR and DEEPMD_SOURCE_DIR
 cmake -DLAMMPS_SOURCE_DIR=$LAMMPS_PREFIX/src \
