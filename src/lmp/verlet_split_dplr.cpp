@@ -18,6 +18,7 @@
 ------------------------------------------------------------------------- */
 
 #include "verlet_split_dplr.h"
+
 #include "universe.h"
 #include "neighbor.h"
 #include "domain.h"
@@ -255,44 +256,26 @@ void VerletSplitDPLR::k2r_comm()
 {  
   int n = 0;
   if (!master) n = atom->nlocal;
-  // eflag = 1;
-  // vflag = 1;
+
   if (eflag) MPI_Bcast(&force->kspace->energy,1,MPI_DOUBLE,1,block);
   if (vflag) MPI_Bcast(force->kspace->virial,6,MPI_DOUBLE,1,block);
 
-  if (!force->kspace_match("pppm/dplr", 1)) {
-    // force!!!
-    MPI_Gatherv(atom->f[0],n*3,MPI_DOUBLE,f_kspace[0],xsize,xdisp,
-                MPI_DOUBLE,0,block);
+  PPPMDPLR *pppm_dplr = (PPPMDPLR *)force->kspace_match("pppm/dplr", 1);
+  if (!pppm_dplr) {
+      error->all(FLERR, "Invalid KSpace style for pppm/dplr");
+  }
+  double *fe = &pppm_dplr->get_fele()[0];
 
-    if (master) {
-      double **f = atom->f;
-      int nlocal = atom->nlocal;
-      for (int i = 0; i < nlocal; i++) {
-        f[i][0] += f_kspace[i][0];
-        f[i][1] += f_kspace[i][1];
-        f[i][2] += f_kspace[i][2];
-      }
+  MPI_Gatherv(fe,n*3,MPI_DOUBLE,f_kspace[0],xsize,xdisp,
+            MPI_DOUBLE,0,block);
+
+  if (master) {
+    int nlocal = atom->nlocal;
+    for (int i = 0; i < nlocal; i++) {
+      fe[i*3+0] = f_kspace[i][0];
+      fe[i*3+1] = f_kspace[i][1];
+      fe[i*3+2] = f_kspace[i][2];
     }
   }
-  else
-  {
-    PPPMDPLR *pppm_dplr = (PPPMDPLR *)force->kspace_match("pppm/dplr", 1);
-    if (!pppm_dplr) {
-        error->all(FLERR, "Invalid KSpace style for pppm/dplr");
-    }
-    double *fe = &pppm_dplr->get_fele()[0];
 
-    MPI_Gatherv(fe,n*3,MPI_DOUBLE,f_kspace[0],xsize,xdisp,
-              MPI_DOUBLE,0,block);
-
-    if (master) {
-      int nlocal = atom->nlocal;
-      for (int i = 0; i < nlocal; i++) {
-        fe[i*3+0] = f_kspace[i][0];
-        fe[i*3+1] = f_kspace[i][1];
-        fe[i*3+2] = f_kspace[i][2];
-      }
-    }
-  }
 }
