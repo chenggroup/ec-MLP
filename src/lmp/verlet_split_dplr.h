@@ -30,7 +30,7 @@ namespace LAMMPS_NS
   {
   public:
     VerletSplitDPLR(class LAMMPS *, int, char **);
-    ~VerletSplitDPLR() override;
+    void setup(int) override;
 
   private:
     void k2r_comm() override;

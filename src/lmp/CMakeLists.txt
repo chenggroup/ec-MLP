@@ -70,10 +70,15 @@ if(NOT LAMMPS_DIR)
   include(LAMMPSInterfaceCXX)
 endif()
 
+include(${LAMMPS_SOURCE_DIR}/../cmake/Modules/LAMMPSUtils.cmake)
+get_lammps_version(${LAMMPS_SOURCE_DIR}/version.h LAMMPS_VERSION_NUMBER)
+
 set(libname "ecmlpplugin")
 file(GLOB LMP_SRC ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+find_package(DeePMD REQUIRED)
 add_library(${libname} MODULE ${LMP_SRC})
 target_link_libraries(${libname} PRIVATE lammps)
+target_link_libraries(${libname} PUBLIC DeePMD::deepmd_c)
 target_include_directories(
   ${libname}
   PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/..
@@ -81,6 +86,8 @@ target_include_directories(
           ${LAMMPS_SOURCE_DIR}/KSPACE ${LAMMPS_SOURCE_DIR}/ELECTRODE
           ${DEEPMD_SOURCE_DIR})
 set_target_properties(${libname} PROPERTIES PREFIX "" SUFFIX ".so")
+target_compile_definitions(
+  ${libname} PRIVATE "LAMMPS_VERSION_NUMBER=${LAMMPS_VERSION_NUMBER}")
 message("${LAMMPS_SOURCE_DIR}")
 
 # ##############################################################################

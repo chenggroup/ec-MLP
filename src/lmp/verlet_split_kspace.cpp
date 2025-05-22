@@ -291,10 +291,8 @@ void VerletSplitKSpace::setup(int flag)
   if (comm->me == 0 && screen)
     fprintf(screen,"Setting up Verlet/split run ...\n");
 
-
-  if (!master){
-    force->kspace->setup();
-  }else Verlet::setup(flag);
+  if (!master) force->kspace->setup();
+  else Verlet::setup(flag);
 }
 
 /* ----------------------------------------------------------------------
