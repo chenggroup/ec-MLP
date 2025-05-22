@@ -254,6 +254,9 @@ VerletSplitDPLR::~VerletSplitDPLR()
 
 void VerletSplitDPLR::k2r_comm()
 {  
+  if (eflag) MPI_Bcast(&force->kspace->energy,1,MPI_DOUBLE,0,block);
+  if (vflag) MPI_Bcast(force->kspace->virial,6,MPI_DOUBLE,0,block);
+
   int n = 0;
   if (!master) n = atom->nlocal;
 

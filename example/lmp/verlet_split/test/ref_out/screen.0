@@ -2,8 +2,8 @@ LAMMPS (17 Apr 2024)
 Processor partition = 0
 OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
   using 1 OpenMP thread(s) per MPI task
-Loaded 1 plugins from /public/home/jxzhu/workspace/finite-field/softwares/ec-MLP/src/lmp/build
-Loaded 1 plugins from /public/home/jxzhu/apps/deepmd/devel/build/deepmd_root/lib/deepmd_lmp
+Loaded 1 plugins from /home/jxzhu/workspace/softwares/ec-mlp/src/lmp/build
+Loaded 1 plugins from /home/jxzhu/apps/deepmd/devel-dplr/build/deepmd_root/lib/deepmd_lmp
 Reading data file ...
   orthogonal box = (0 0 0) to (24.84 24.84 24.84)
   1 by 1 by 1 MPI processor grid
@@ -23,37 +23,37 @@ Finding 1-2 1-3 1-4 neighbors ...
      0 = max # of 1-4 neighbors
      1 = max # of special neighbors
   special bonds CPU = 0.000 seconds
-  read_data CPU = 0.008 seconds
+  read_data CPU = 0.005 seconds
 1536 atoms in group real_atom
 512 atoms in group virtual_atom
 Summary of lammps deepmd module ...
   >>> Info of deepmd-kit:
-  installed to:       /public/home/jxzhu/apps/deepmd/devel/build/deepmd_root
-  source:             v3.0.0-99-gbaaaa179
+  installed to:       /home/jxzhu/apps/deepmd/devel-dplr/build/deepmd_root
+  source:             v3.1.0a0-30-g5601d872-dirty
   source branch:      devel
-  source commit:      baaaa179
-  source commit at:   2025-03-18 05:55:59 +0000
+  source commit:      5601d872
+  source commit at:   2025-05-21 09:47:03 +0800
   support model ver.: 1.1 
   build variant:      cuda
-  build with tf inc:  /public/home/jxzhu/.conda/envs/deepmd-devel/lib/python3.11/site-packages/tensorflow/include;/public/home/jxzhu/.conda/envs/deepmd-devel/lib/python3.11/site-packages/tensorflow/include
-  build with tf lib:  /public/home/jxzhu/.conda/envs/deepmd-devel/lib/python3.11/site-packages/tensorflow/libtensorflow_cc.so.2
-  build with pt lib:  torch;torch_library;/public/home/jxzhu/apps/libtorch/libtorch-cxx11-abi-shared-with-deps-2.1.1+cu121/lib/libc10.so;/public/home/jxzhu/apps/libtorch/libtorch-cxx11-abi-shared-with-deps-2.1.1+cu121/lib/libkineto.a;/public/software/cuda/cuda-12.1/targets/x86_64-linux/lib/stubs/libcuda.so;/public/software/cuda/cuda-12.1/targets/x86_64-linux/lib/libnvrtc.so;/public/software/cuda/cuda-12.1/lib64/libnvToolsExt.so;/public/software/cuda/cuda-12.1/lib64/libcudart.so;/public/home/jxzhu/apps/libtorch/libtorch-cxx11-abi-shared-with-deps-2.1.1+cu121/lib/libc10_cuda.so
+  build with tf inc:  /home/jxzhu/apps/miniconda3/envs/devel-dplr/lib/python3.11/site-packages/tensorflow/include;/home/jxzhu/apps/miniconda3/envs/devel-dplr/lib/python3.11/site-packages/tensorflow/include
+  build with tf lib:  /home/jxzhu/apps/miniconda3/envs/devel-dplr/lib/python3.11/site-packages/tensorflow/libtensorflow_cc.so.2
+  build with pt lib:  torch;torch_library;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib/libc10.so;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib/libkineto.a;/usr/local/cuda-12.4/targets/x86_64-linux/lib/stubs/libcuda.so;/usr/local/cuda-12.4/targets/x86_64-linux/lib/libnvrtc.so;/usr/local/cuda-12.4/lib64/libnvToolsExt.so;/usr/local/cuda-12.4/lib64/libcudart.so;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib/libc10_cuda.so
   set tf intra_op_parallelism_threads: 0
   set tf inter_op_parallelism_threads: 0
   >>> Info of lammps module:
-  use deepmd-kit at:  /public/home/jxzhu/apps/deepmd/devel/build/deepmd_root
-  source:             v3.0.0-99-gbaaaa179
+  use deepmd-kit at:  /home/jxzhu/apps/deepmd/devel-dplr/build/deepmd_root
+  source:             v3.1.0a0-30-g5601d872-dirty
   source branch:      devel
-  source commit:      baaaa179
-  source commit at:   2025-03-18 05:55:59 +0000
-  build with inc:     /public/home/jxzhu/apps/libtorch/libtorch-cxx11-abi-shared-with-deps-2.1.1+cu121/include;/public/home/jxzhu/apps/libtorch/libtorch-cxx11-abi-shared-with-deps-2.1.1+cu121/include/torch/csrc/api/include
-  build with lib:     /public/home/jxzhu/.conda/envs/deepmd-devel/lib/python3.11/site-packages/tensorflow;/public/home/jxzhu/apps/libtorch/libtorch-cxx11-abi-shared-with-deps-2.1.1+cu121/lib
+  source commit:      5601d872
+  source commit at:   2025-05-21 09:47:03 +0800
+  build with inc:     /home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/include;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/include/torch/csrc/api/include
+  build with lib:     /home/jxzhu/apps/miniconda3/envs/devel-dplr/lib/python3.11/site-packages/tensorflow;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib
 WARNING: Interaction between types 1 and 3 is set with deepmd, but will be ignored.
- Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/public/home/jxzhu/apps/deepmd/devel/source/lmp/pair_deepmd.cpp:883)
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/apps/deepmd/devel-dplr/source/lmp/pair_deepmd.cpp:884)
 WARNING: Interaction between types 2 and 3 is set with deepmd, but will be ignored.
- Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/public/home/jxzhu/apps/deepmd/devel/source/lmp/pair_deepmd.cpp:883)
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/apps/deepmd/devel-dplr/source/lmp/pair_deepmd.cpp:884)
 WARNING: Interaction between types 3 and 3 is set with deepmd, but will be ignored.
- Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/public/home/jxzhu/apps/deepmd/devel/source/lmp/pair_deepmd.cpp:883)
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/apps/deepmd/devel-dplr/source/lmp/pair_deepmd.cpp:884)
 Finding 1-2 1-3 1-4 neighbors ...
   special bond factors lj:    1        1        1       
   special bond factors coul:  1        1        1       
@@ -78,14 +78,14 @@ PPPM initialization ...
   stencil order = 5
   estimated absolute RMS force accuracy = 0.34534068
   estimated relative force accuracy = 0.023982583
-  using double precision FFTW3
+  using double precision KISS FFT
   3d grid and FFT values/proc = 421875 262144
 WARNING: Interaction between types 1 and 3 is set with deepmd, but will be ignored.
- Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/public/home/jxzhu/apps/deepmd/devel/source/lmp/pair_base.cpp:446)
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/apps/deepmd/devel-dplr/source/lmp/pair_base.cpp:446)
 WARNING: Interaction between types 2 and 3 is set with deepmd, but will be ignored.
- Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/public/home/jxzhu/apps/deepmd/devel/source/lmp/pair_base.cpp:446)
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/apps/deepmd/devel-dplr/source/lmp/pair_base.cpp:446)
 WARNING: Interaction between types 3 and 3 is set with deepmd, but will be ignored.
- Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/public/home/jxzhu/apps/deepmd/devel/source/lmp/pair_base.cpp:446)
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/apps/deepmd/devel-dplr/source/lmp/pair_base.cpp:446)
 Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
 WARNING: Neighbor exclusions used with KSpace solver may give inconsistent Coulombic energies (src/neighbor.cpp:654)
 Neighbor list info ...
@@ -100,31 +100,53 @@ Neighbor list info ...
       pair build: full/bin
       stencil: full/bin/3d
       bin: standard
-Setting up Verlet/split run ...
+Setting up Verlet/split/dplr run ...
 Setting up Verlet run ...
   Unit style    : metal
   Current step  : 0
   Time step     : 0.0005
 Per MPI rank memory allocation (min/avg/max) = 46 | 46 | 46 Mbytes
    Step          Temp          E_pair         E_mol          TotEng         Press     
-         0   300           -7477.9535      0             -7398.5748     -15512.225    
-        10   263.22486     -7487.2537      0             -7417.6056      34661.622    
-        20   259.78925     -7486.1834      0             -7417.4444     -16186.15     
-        30   286.35422     -7493.3446      0             -7417.5766      28947.54     
-        40   260.59626     -7486.5262      0             -7417.5736     -11744.73     
-        50   282.71131     -7492.5445      0             -7417.7404      21959.386    
-        60   259.845       -7486.5915      0             -7417.8377     -3961.4262    
-        70   272.54196     -7490.3929      0             -7418.2795      16569.721    
-        80   251.5653      -7485.1545      0             -7418.5914      1588.3912    
-        90   267.58593     -7489.7685      0             -7418.9665      10919.052    
-       100   263.347       -7489.0276      0             -7419.3472      6857.6569    
-       110   277.24977     -7493.104       0             -7419.7449      7715.4292    
-       120   265.19066     -7490.2192      0             -7420.0509      8230.839     
-       130   264.62113     -7490.417       0             -7420.3994      5719.6199    
-       140   264.55204     -7490.7613      0             -7420.762       9547.2254    
-       150   275.31429     -7493.9171      0             -7421.0702      5822.8805    
-       160   272.57229     -7493.4838      0             -7421.3624      8097.932     
-       170   266.63029     -7492.2912      0             -7421.742       5909.4653    
-       180   260.25307     -7491.0166      0             -7422.1548      8492.4256    
-       190   258.51604     -7490.8679      0             -7422.4657      7329.5509    
-       200   258.85316     -7491.2493      0             -7422.7579      8002.9191
+         0   300           -177187.77      0             -177108.39     -15512.225    
+        10   263.22486     -177194.62      0             -177124.97      34308.925    
+        20   259.78925     -177194.07      0             -177125.34     -16473.728    
+        30   286.35422     -177199.98      0             -177124.21      28542.821    
+        40   260.59626     -177194.16      0             -177125.21     -11963.392    
+        50   282.71131     -177198.33      0             -177123.53      21529.633    
+        60   259.845       -177192.24      0             -177123.49     -4383.7919    
+        70   272.54196     -177196.09      0             -177123.98      16165.584    
+        80   251.5653      -177191.82      0             -177125.26      1313.7402    
+        90   267.58593     -177196.04      0             -177125.24      10599.122    
+       100   263.347       -177195.1       0             -177125.42      6483.2579    
+Loop time of 26.0312 on 1 procs for 100 steps with 2048 atoms
+
+Performance: 0.166 ns/day, 144.618 hours/ns, 3.842 timesteps/s, 7.867 katom-step/s
+101.4% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 10.783     | 10.783     | 10.783     |   0.0 | 41.42
+Bond    | 0.00011006 | 0.00011006 | 0.00011006 |   0.0 |  0.00
+Kspace  | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 0.16213    | 0.16213    | 0.16213    |   0.0 |  0.62
+Comm    | 0.012994   | 0.012994   | 0.012994   |   0.0 |  0.05
+Output  | 0.021311   | 0.021311   | 0.021311   |   0.0 |  0.08
+Modify  | 15.049     | 15.049     | 15.049     |   0.0 | 57.81
+Other   |            | 0.003563   |            |       |  0.01
+
+Nlocal:           2048 ave        2048 max        2048 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           6868 ave        6868 max        6868 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:       365078 ave      365078 max      365078 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 365078
+Ave neighs/atom = 178.26074
+Ave special neighs/atom = 0.5
+Neighbor list builds = 10
+Dangerous builds not checked
+Total wall time: 0:00:27

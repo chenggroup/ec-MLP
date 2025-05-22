@@ -1,11 +1,11 @@
-variable        NSTEPS          equal 500
+variable        NSTEPS          equal 100
 variable        DT              equal 0.0005
 variable        BETA            equal 0.4
 variable        KMESH_X         equal 64
 variable        KMESH_Y         equal 64
 variable        KMESH_Z         equal 64
 variable        THERMO_FREQ     equal 10
-variable        DUMP_FREQ       equal 100
+variable        DUMP_FREQ       equal 10
 variable        TEMP            equal 300.000000
 variable        SEED            equal 1
 

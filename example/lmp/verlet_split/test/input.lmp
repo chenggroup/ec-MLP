@@ -1,11 +1,11 @@
-variable        NSTEPS          equal 500
+variable        NSTEPS          equal 100
 variable        DT              equal 0.0005
 variable        BETA            equal 0.4
 variable        KMESH_X         equal 64
 variable        KMESH_Y         equal 64
 variable        KMESH_Z         equal 64
 variable        THERMO_FREQ     equal 10
-variable        DUMP_FREQ       equal 100
+variable        DUMP_FREQ       equal 10
 variable        TEMP            equal 300.000000
 variable        SEED            equal 1
 
@@ -34,15 +34,15 @@ bond_style      zero
 bond_coeff      *
 special_bonds   lj/coul 1 1 1 angle no
 
-kspace_style    pppm/dplr 1e-5
+kspace_style    pppm 1e-5
 kspace_modify   gewald ${BETA} diff ik mesh ${KMESH_X} ${KMESH_Y} ${KMESH_Z}
 
 velocity        all create ${TEMP} ${SEED}
 velocity        all scale ${TEMP}
 
-compute		real_temp real_atom temp
-fix		1 real_atom nvt temp ${TEMP} ${TEMP} $(100*dt)
-fix_modify	1 temp real_temp
+compute         real_temp real_atom temp
+fix             1 real_atom nvt temp ${TEMP} ${TEMP} $(100*dt)
+fix_modify      1 temp real_temp
 
 fix             fdplr all dplr model ../graph.pb type_associate 1 3 bond_type 1
 
@@ -51,9 +51,9 @@ thermo          ${THERMO_FREQ}
 dump            TRAJ real_atom custom ${DUMP_FREQ} dump.lammpstrj id element xu yu zu fx fy fz vx vy vz
 dump_modify     TRAJ element O H X sort id
 
-timestep        ${DT}
-
 add_run_style   verlet/split/dplr
 run_style       verlet/split/dplr
+
+timestep        ${DT}
 
 run             ${NSTEPS}
