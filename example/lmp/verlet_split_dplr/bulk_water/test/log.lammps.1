@@ -1,0 +1,178 @@
+LAMMPS (17 Apr 2024)
+Processor partition = 1
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
+  using 1 OpenMP thread(s) per MPI task
+Loaded 1 plugins from /home/jxzhu/workspace/softwares/ec-mlp/src/lmp/build
+Loaded 1 plugins from /home/jxzhu/workspace/2024-dmff-qeq/softwares/deepmd-kit/build/deepmd_root/lib/deepmd_lmp
+variable        NSTEPS          equal 100
+variable        DT              equal 0.0005
+variable        BETA            equal 0.4
+variable        KMESH_X         equal 64
+variable        KMESH_Y         equal 64
+variable        KMESH_Z         equal 64
+variable        THERMO_FREQ     equal 10
+variable        DUMP_FREQ       equal 10
+variable        TEMP            equal 300.000000
+variable        SEED            equal 1
+
+units           metal
+boundary        p p p
+atom_style      full
+
+read_data       system.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (24.84 24.84 24.84)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  2048 atoms
+  scanning bonds ...
+  1 = max bonds/atom
+  orthogonal box = (0 0 0) to (24.84 24.84 24.84)
+  1 by 1 by 1 MPI processor grid
+  reading bonds ...
+  512 bonds
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    0        0        0       
+  special bond factors coul:  0        0        0       
+     1 = max # of 1-2 neighbors
+     0 = max # of 1-3 neighbors
+     0 = max # of 1-4 neighbors
+     1 = max # of special neighbors
+  special bonds CPU = 0.000 seconds
+  read_data CPU = 0.006 seconds
+restart         50000 system.restart
+
+# O H X
+mass            1 15.9994
+mass            2 1.008
+mass            3 1.008
+
+group           real_atom type 1 2
+1536 atoms in group real_atom
+group           virtual_atom type 3
+512 atoms in group virtual_atom
+
+neighbor        2.0 bin
+neigh_modify    every 10 delay 0 check no exclude group real_atom virtual_atom
+
+pair_style      deepmd ../graph.pb
+Summary of lammps deepmd module ...
+  >>> Info of deepmd-kit:
+  installed to:       /home/jxzhu/workspace/2024-dmff-qeq/softwares/deepmd-kit/build/deepmd_root
+  source:             v3.0.0-86-g818a1ee1-dirty
+  source branch:      devel-pt-modifier
+  source commit:      818a1ee1
+  source commit at:   2025-03-03 15:26:21 +0800
+  support model ver.: 1.1 
+  build variant:      cuda
+  build with tf inc:  /home/jxzhu/apps/miniconda3/envs/dp-qeq/lib/python3.11/site-packages/tensorflow/include;/home/jxzhu/apps/miniconda3/envs/dp-qeq/lib/python3.11/site-packages/tensorflow/include
+  build with tf lib:  /home/jxzhu/apps/miniconda3/envs/dp-qeq/lib/python3.11/site-packages/tensorflow/libtensorflow_cc.so.2
+  build with pt lib:  torch;torch_library;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib/libc10.so;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib/libkineto.a;/usr/local/cuda-12.4/targets/x86_64-linux/lib/stubs/libcuda.so;/usr/local/cuda-12.4/targets/x86_64-linux/lib/libnvrtc.so;/usr/lib/x86_64-linux-gnu/libnvToolsExt.so;/usr/local/cuda-12.4/lib64/libcudart.so;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib/libc10_cuda.so
+  set tf intra_op_parallelism_threads: 0
+  set tf inter_op_parallelism_threads: 0
+  >>> Info of lammps module:
+  use deepmd-kit at:  /home/jxzhu/workspace/2024-dmff-qeq/softwares/deepmd-kit/build/deepmd_root
+  source:             v3.0.0-86-g818a1ee1-dirty
+  source branch:      devel-pt-modifier
+  source commit:      818a1ee1
+  source commit at:   2025-03-03 15:26:21 +0800
+  build with inc:     /home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/include;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/include/torch/csrc/api/include
+  build with lib:     /home/jxzhu/apps/miniconda3/envs/dp-qeq/lib/python3.11/site-packages/tensorflow;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib
+pair_coeff      * *
+WARNING: Interaction between types 1 and 3 is set with deepmd, but will be ignored.
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/workspace/2024-dmff-qeq/softwares/deepmd-kit/source/lmp/pair_deepmd.cpp:883)
+WARNING: Interaction between types 2 and 3 is set with deepmd, but will be ignored.
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/workspace/2024-dmff-qeq/softwares/deepmd-kit/source/lmp/pair_deepmd.cpp:883)
+WARNING: Interaction between types 3 and 3 is set with deepmd, but will be ignored.
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/workspace/2024-dmff-qeq/softwares/deepmd-kit/source/lmp/pair_deepmd.cpp:883)
+
+bond_style      zero
+bond_coeff      *
+special_bonds   lj/coul 1 1 1 angle no
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    1        1        1       
+  special bond factors coul:  1        1        1       
+     1 = max # of 1-2 neighbors
+     1 = max # of special neighbors
+  special bonds CPU = 0.000 seconds
+
+kspace_style    pppm 1e-5
+kspace_modify   gewald ${BETA} diff ik mesh ${KMESH_X} ${KMESH_Y} ${KMESH_Z}
+kspace_modify   gewald 0.4 diff ik mesh ${KMESH_X} ${KMESH_Y} ${KMESH_Z}
+kspace_modify   gewald 0.4 diff ik mesh 64 ${KMESH_Y} ${KMESH_Z}
+kspace_modify   gewald 0.4 diff ik mesh 64 64 ${KMESH_Z}
+kspace_modify   gewald 0.4 diff ik mesh 64 64 64
+
+velocity        all create ${TEMP} ${SEED}
+velocity        all create 300 ${SEED}
+velocity        all create 300 1
+velocity        all scale ${TEMP}
+velocity        all scale 300
+
+compute         real_temp real_atom temp
+fix             1 real_atom nvt temp ${TEMP} ${TEMP} $(100*dt)
+fix             1 real_atom nvt temp 300 ${TEMP} $(100*dt)
+fix             1 real_atom nvt temp 300 300 $(100*dt)
+fix             1 real_atom nvt temp 300 300 0.10000000000000000555
+fix_modify      1 temp real_temp
+WARNING: Temperature for fix modify is not for group all (src/fix_nh.cpp:1397)
+
+fix             fdplr all dplr model ../graph.pb type_associate 1 3 bond_type 1
+
+thermo          ${THERMO_FREQ}
+thermo          10
+
+dump            TRAJ real_atom custom ${DUMP_FREQ} dump.lammpstrj id element xu yu zu fx fy fz vx vy vz
+dump            TRAJ real_atom custom 10 dump.lammpstrj id element xu yu zu fx fy fz vx vy vz
+dump_modify     TRAJ element O H X sort id
+
+add_run_style   verlet/split/dplr
+Added run_style verlet/split/dplr successfully.
+run_style       verlet/split/dplr
+
+timestep        ${DT}
+timestep        0.0005
+
+run             ${NSTEPS}
+run             100
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Your simulation uses code contributions which should be cited:
+
+- USER-DEEPMD package:
+
+@article{Wang_ComputPhysCommun_2018_v228_p178,
+  author = {Wang, Han and Zhang, Linfeng and Han, Jiequn and E, Weinan},
+  doi = {10.1016/j.cpc.2018.03.016},
+  url = {https://doi.org/10.1016/j.cpc.2018.03.016},
+  year = 2018,
+  month = {jul},
+  publisher = {Elsevier {BV}},
+  volume = 228,
+  journal = {Comput. Phys. Commun.},
+  title = {{DeePMD-kit: A deep learning package for many-body potential energy representation and molecular dynamics}},
+  pages = {178--184}
+}
+@article{Zeng_JChemPhys_2023_v159_p054801,
+  title  = {{DeePMD-kit v2: A software package for deep potential models}},
+  author =   {Jinzhe Zeng and Duo Zhang and Denghui Lu and Pinghui Mo and Zeyu Li
+         and Yixiao Chen and Mari{\'a}n Rynik and Li'ang Huang and Ziyao Li and 
+         Shaochen Shi and Yingze Wang and Haotian Ye and Ping Tuo and Jiabin
+         Yang and Ye Ding and Yifan Li and Davide Tisi and Qiyu Zeng and Han 
+         Bao and Yu Xia and Jiameng Huang and Koki Muraoka and Yibo Wang and 
+         Junhan Chang and Fengbo Yuan and Sigbj{\o}rn L{\o}land Bore and Chun
+         Cai and Yinnian Lin and Bo Wang and Jiayan Xu and Jia-Xin Zhu and 
+         Chenxing Luo and Yuzhi Zhang and Rhys E A Goodall and Wenshuo Liang
+         and Anurag Kumar Singh and Sikai Yao and Jingchao Zhang and Renata
+         Wentzcovitch and Jiequn Han and Jie Liu and Weile Jia and Darrin M
+         York and Weinan E and Roberto Car and Linfeng Zhang and Han Wang},
+  journal =  {J. Chem. Phys.},
+  volume =   159,
+  issue =    5,  
+  year =    2023,
+  pages  =   054801,
+  doi =      {10.1063/5.0155600},
+}
+@Article{Zeng_arXiv_2025_p2502.19161,
+  annote    
