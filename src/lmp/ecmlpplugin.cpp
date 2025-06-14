@@ -18,10 +18,10 @@ namespace LAMMPS_NS
   {
     return new VerletSplitDPLR(lmp, narg, arg);
   }
-  // static Integrate *VerletSplitKSpace_creator(LAMMPS *lmp, int narg, char **arg)
-  // {
-  //   return new VerletSplitKSpace(lmp, narg, arg);
-  // }
+  static Integrate *VerletSplitKSpace_creator(LAMMPS *lmp, int narg, char **arg)
+  {
+    return new VerletSplitKSpace(lmp, narg, arg);
+  }
 
   // Define the command class IntegrateRegisterCommand to register VerletSplitDPLR
   // into integrate_map
@@ -56,26 +56,26 @@ namespace LAMMPS_NS
           else
           {
             error->all(FLERR,
-                       "run_style {} already exists in integrate_map",
+                       "Integrate style %s already exists in integrate_map",
                        integrate_name.c_str());
           }
         }
-        // else if (strcmp(arg[i], "verlet/split/kspace") == 0)
-        // {
-        //   integrate_name = "verlet/split/kspace"; // Name of the integrate style
-        //   if (lmp->update->integrate_map->find(integrate_name) ==
-        //       lmp->update->integrate_map->end())
-        //   {
-        //     (*lmp->update->integrate_map)[integrate_name] =
-        //         (Update::IntegrateCreator)(lammpsplugin_factory2 *)&VerletSplitKSpace_creator;
-        //   }
-        //   else
-        //   {
-        //     error->all(FLERR,
-        //                "Integrate style %s already exists in integrate_map",
-        //                integrate_name.c_str());
-        //   }
-        // }
+        else if (strcmp(arg[i], "verlet/split/kspace") == 0)
+        {
+          integrate_name = "verlet/split/kspace"; // Name of the integrate style
+          if (lmp->update->integrate_map->find(integrate_name) ==
+              lmp->update->integrate_map->end())
+          {
+            (*lmp->update->integrate_map)[integrate_name] =
+                (Update::IntegrateCreator)(lammpsplugin_factory2 *)&VerletSplitKSpace_creator;
+          }
+          else
+          {
+            error->all(FLERR,
+                       "Integrate style %s already exists in integrate_map",
+                       integrate_name.c_str());
+          }
+        }
         else
         {
           error->all(FLERR, "Unsupported run_style: {}", arg[i]);
