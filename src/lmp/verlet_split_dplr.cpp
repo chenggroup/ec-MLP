@@ -144,10 +144,6 @@ void VerletSplitDPLR::setup(int flag)
     auto fix_dplr_list = modify->get_fix_by_style("dplr");
     if (fix_dplr_list.size() != 1) error->all(FLERR, "fix dplr should be used once");
     FixDPLR *fix_dplr = (FixDPLR *)fix_dplr_list[0];
-    /*if (comm->me == 0 && screen) {
-    fprintf(screen, "1\n");
-    fflush(screen);  
-    }*/
 
     if(force->kspace_match("pppm/dplr", 1) == nullptr) {
       for (int i = 0; i < nlocal; i++) {
@@ -159,13 +155,9 @@ void VerletSplitDPLR::setup(int flag)
         atom->f[i][2] = tmp_f[i * 3 + 2];
       }
     }
-    /*if (comm->me == 0 && screen) {
-    fprintf(screen, "2\n");
-    fflush(screen);  
-    }*/
+
     modify->setup_pre_reverse(eflag,vflag);
     if (force->newton) comm->reverse_comm();
-
     modify->setup(vflag);
     output->setup(flag);
     update->setupflag = 0;
@@ -188,9 +180,6 @@ void VerletSplitDPLR::k2r_comm()
   if(force->kspace_match("pppm/dplr", 1) != nullptr) {
     PPPMDPLR *pppm_dplr = (PPPMDPLR *)force->kspace_match("pppm/dplr", 1);
     double *fe = &pppm_dplr->get_fele()[0];
-    //const vector<double> &fe(pppm_dplr->get_fele());
-    //MPI_Gatherv(fe, n*3, MPI_DOUBLE, f_kspace[0], xsize, xdisp,
-    //          MPI_DOUBLE, 0, block);
     if (master) {
       int nlocal = atom->nlocal;
       for (int i = 0; i < nlocal * 3; i++) {
@@ -199,9 +188,6 @@ void VerletSplitDPLR::k2r_comm()
     }
     MPI_Gatherv(fe, n*3, MPI_DOUBLE, f_kspace[0], xsize, xdisp,
               MPI_DOUBLE, 0, block);
-    //utils::logmesg(lmp, "DPLR self energy correction: {:.8f}\n",fe.data()[0]);
-    //MPI_Gatherv(const_cast<double*>(fe.data()), n*3, MPI_DOUBLE, f_kspace[0], xsize, xdisp,
-    //          MPI_DOUBLE, 0, block);
   }else{
   MPI_Gatherv(atom->f[0], n*3, MPI_DOUBLE, f_kspace[0], xsize, xdisp,
               MPI_DOUBLE, 0, block);
@@ -215,7 +201,6 @@ void VerletSplitDPLR::k2r_comm()
   if (master) {
     int nlocal = atom->nlocal;
     for (int i = 0; i < nlocal; i++) {
-      //utils::logmesg(lmp, "DPLR self energy correction: {:.8f}\n",f_kspace[i][0]);
       fix_dplr->dfele[i * 3 + 0] = f_kspace[i][0];
       fix_dplr->dfele[i * 3 + 1] = f_kspace[i][1];
       fix_dplr->dfele[i * 3 + 2] = f_kspace[i][2];
