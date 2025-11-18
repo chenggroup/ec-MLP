@@ -1,0 +1,268 @@
+LAMMPS (17 Apr 2024)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
+  using 1 OpenMP thread(s) per MPI task
+Loaded 1 plugins from /home/jxzhu/apps/deepmd/devel-dplr/build/deepmd_root/lib/deepmd_lmp
+variable        NSTEPS          equal 100
+variable        DT              equal 0.0005
+variable        BETA            equal 0.4
+variable        KMESH_X         equal 64
+variable        KMESH_Y         equal 64
+variable        KMESH_Z         equal 64
+variable        THERMO_FREQ     equal 10
+variable        DUMP_FREQ       equal 10
+variable        TEMP            equal 300.000000
+variable        SEED            equal 1
+
+units           metal
+boundary        p p p
+atom_style      full
+
+read_data       system.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (24.84 24.84 24.84)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  2048 atoms
+  scanning bonds ...
+  1 = max bonds/atom
+  orthogonal box = (0 0 0) to (24.84 24.84 24.84)
+  1 by 1 by 1 MPI processor grid
+  reading bonds ...
+  512 bonds
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    0        0        0       
+  special bond factors coul:  0        0        0       
+     1 = max # of 1-2 neighbors
+     0 = max # of 1-3 neighbors
+     0 = max # of 1-4 neighbors
+     1 = max # of special neighbors
+  special bonds CPU = 0.001 seconds
+  read_data CPU = 0.005 seconds
+restart         50000 system.restart
+
+# O H X
+mass            1 15.9994
+mass            2 1.008
+mass            3 1.008
+
+group           real_atom type 1 2
+1536 atoms in group real_atom
+group           virtual_atom type 3
+512 atoms in group virtual_atom
+
+neighbor        2.0 bin
+neigh_modify    every 10 delay 0 check no exclude group real_atom virtual_atom
+
+pair_style      deepmd ../graph.pb
+Summary of lammps deepmd module ...
+  >>> Info of deepmd-kit:
+  installed to:       /home/jxzhu/apps/deepmd/devel-dplr/build/deepmd_root
+  source:             v3.1.0a0-30-g5601d872-dirty
+  source branch:      devel
+  source commit:      5601d872
+  source commit at:   2025-05-21 09:47:03 +0800
+  support model ver.: 1.1 
+  build variant:      cuda
+  build with tf inc:  /home/jxzhu/apps/miniconda3/envs/devel-dplr/lib/python3.11/site-packages/tensorflow/include;/home/jxzhu/apps/miniconda3/envs/devel-dplr/lib/python3.11/site-packages/tensorflow/include
+  build with tf lib:  /home/jxzhu/apps/miniconda3/envs/devel-dplr/lib/python3.11/site-packages/tensorflow/libtensorflow_cc.so.2
+  build with pt lib:  torch;torch_library;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib/libc10.so;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib/libkineto.a;/usr/local/cuda-12.4/targets/x86_64-linux/lib/stubs/libcuda.so;/usr/local/cuda-12.4/targets/x86_64-linux/lib/libnvrtc.so;/usr/local/cuda-12.4/lib64/libnvToolsExt.so;/usr/local/cuda-12.4/lib64/libcudart.so;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib/libc10_cuda.so
+  set tf intra_op_parallelism_threads: 0
+  set tf inter_op_parallelism_threads: 0
+  >>> Info of lammps module:
+  use deepmd-kit at:  /home/jxzhu/apps/deepmd/devel-dplr/build/deepmd_root
+  source:             v3.1.0a0-30-g5601d872-dirty
+  source branch:      devel
+  source commit:      5601d872
+  source commit at:   2025-05-21 09:47:03 +0800
+  build with inc:     /home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/include;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/include/torch/csrc/api/include
+  build with lib:     /home/jxzhu/apps/miniconda3/envs/devel-dplr/lib/python3.11/site-packages/tensorflow;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib
+pair_coeff      * *
+WARNING: Interaction between types 1 and 3 is set with deepmd, but will be ignored.
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/apps/deepmd/devel-dplr/source/lmp/pair_deepmd.cpp:884)
+WARNING: Interaction between types 2 and 3 is set with deepmd, but will be ignored.
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/apps/deepmd/devel-dplr/source/lmp/pair_deepmd.cpp:884)
+WARNING: Interaction between types 3 and 3 is set with deepmd, but will be ignored.
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/apps/deepmd/devel-dplr/source/lmp/pair_deepmd.cpp:884)
+
+bond_style      zero
+bond_coeff      *
+special_bonds   lj/coul 1 1 1 angle no
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    1        1        1       
+  special bond factors coul:  1        1        1       
+     1 = max # of 1-2 neighbors
+     1 = max # of special neighbors
+  special bonds CPU = 0.000 seconds
+
+kspace_style    pppm/dplr 1e-5
+kspace_modify   gewald ${BETA} diff ik mesh ${KMESH_X} ${KMESH_Y} ${KMESH_Z}
+kspace_modify   gewald 0.4 diff ik mesh ${KMESH_X} ${KMESH_Y} ${KMESH_Z}
+kspace_modify   gewald 0.4 diff ik mesh 64 ${KMESH_Y} ${KMESH_Z}
+kspace_modify   gewald 0.4 diff ik mesh 64 64 ${KMESH_Z}
+kspace_modify   gewald 0.4 diff ik mesh 64 64 64
+
+velocity        all create ${TEMP} ${SEED}
+velocity        all create 300 ${SEED}
+velocity        all create 300 1
+velocity        all scale ${TEMP}
+velocity        all scale 300
+
+compute		real_temp real_atom temp
+fix		1 real_atom nvt temp ${TEMP} ${TEMP} $(100*dt)
+fix		1 real_atom nvt temp 300 ${TEMP} $(100*dt)
+fix		1 real_atom nvt temp 300 300 $(100*dt)
+fix		1 real_atom nvt temp 300 300 0.10000000000000000555
+fix_modify	1 temp real_temp
+WARNING: Temperature for fix modify is not for group all (src/fix_nh.cpp:1397)
+
+fix             fdplr all dplr model ../graph.pb type_associate 1 3 bond_type 1
+
+thermo          ${THERMO_FREQ}
+thermo          10
+
+dump            TRAJ real_atom custom ${DUMP_FREQ} dump.lammpstrj id element xu yu zu fx fy fz vx vy vz
+dump            TRAJ real_atom custom 10 dump.lammpstrj id element xu yu zu fx fy fz vx vy vz
+dump_modify     TRAJ element O H X sort id
+
+timestep        ${DT}
+timestep        0.0005
+
+run             ${NSTEPS}
+run             100
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+Your simulation uses code contributions which should be cited:
+
+- USER-DEEPMD package:
+
+@article{Wang_ComputPhysCommun_2018_v228_p178,
+  author = {Wang, Han and Zhang, Linfeng and Han, Jiequn and E, Weinan},
+  doi = {10.1016/j.cpc.2018.03.016},
+  url = {https://doi.org/10.1016/j.cpc.2018.03.016},
+  year = 2018,
+  month = {jul},
+  publisher = {Elsevier {BV}},
+  volume = 228,
+  journal = {Comput. Phys. Commun.},
+  title = {{DeePMD-kit: A deep learning package for many-body potential energy representation and molecular dynamics}},
+  pages = {178--184}
+}
+@article{Zeng_JChemPhys_2023_v159_p054801,
+  title  = {{DeePMD-kit v2: A software package for deep potential models}},
+  author =   {Jinzhe Zeng and Duo Zhang and Denghui Lu and Pinghui Mo and Zeyu Li
+         and Yixiao Chen and Mari{\'a}n Rynik and Li'ang Huang and Ziyao Li and 
+         Shaochen Shi and Yingze Wang and Haotian Ye and Ping Tuo and Jiabin
+         Yang and Ye Ding and Yifan Li and Davide Tisi and Qiyu Zeng and Han 
+         Bao and Yu Xia and Jiameng Huang and Koki Muraoka and Yibo Wang and 
+         Junhan Chang and Fengbo Yuan and Sigbj{\o}rn L{\o}land Bore and Chun
+         Cai and Yinnian Lin and Bo Wang and Jiayan Xu and Jia-Xin Zhu and 
+         Chenxing Luo and Yuzhi Zhang and Rhys E A Goodall and Wenshuo Liang
+         and Anurag Kumar Singh and Sikai Yao and Jingchao Zhang and Renata
+         Wentzcovitch and Jiequn Han and Jie Liu and Weile Jia and Darrin M
+         York and Weinan E and Roberto Car and Linfeng Zhang and Han Wang},
+  journal =  {J. Chem. Phys.},
+  volume =   159,
+  issue =    5,  
+  year =    2023,
+  pages  =   054801,
+  doi =      {10.1063/5.0155600},
+}
+@Article{Zeng_JChemTheoryComput_2025_v21_p4375,
+  author =   {Jinzhe Zeng and Duo Zhang and Anyang Peng and Xiangyu Zhang and Sensen
+             He and Yan Wang and Xinzijian Liu and Hangrui Bi and Yifan Li and Chun
+             Cai and Chengqian Zhang and Yiming Du and Jia-Xin Zhu and Pinghui Mo
+             and Zhengtao Huang and Qiyu Zeng and Shaochen Shi and Xuejian Qin and
+             Zhaoxi Yu and Chenxing Luo and Ye Ding and Yun-Pei Liu and Ruosong Shi
+             and Zhenyu Wang and Sigbj{\o}rn L{\o}land Bore and Junhan Chang and
+             Zhe Deng and Zhaohan Ding and Siyuan Han and Wanrun Jiang and Guolin
+             Ke and Zhaoqing Liu and Denghui Lu and Koki Muraoka and Hananeh Oliaei
+             and Anurag Kumar Singh and Haohui Que and Weihong Xu and Zhangmancang
+             Xu and Yong-Bin Zhuang and Jiayu Dai and Timothy J. Giese and Weile
+             Jia and Ben Xu and Darrin M. York and Linfeng Zhang and Han Wang},
+    title =    {{DeePMD-kit v3: A Multiple-Backend Framework for Machine Learning
+             Potentials}},
+  journal =  {J. Chem. Theory Comput.},
+  year =     2025,
+  volume =   21,
+  number =   9,
+  pages =    {4375--4385},
+  doi =      {10.1021/acs.jctc.5c00340},
+}
+
+CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
+
+PPPM initialization ...
+  using 12-bit tables for long-range coulomb (src/kspace.cpp:342)
+  G vector (1/distance) = 0.4
+  grid = 64 64 64
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.34534068
+  estimated relative force accuracy = 0.023982583
+  using double precision KISS FFT
+  3d grid and FFT values/proc = 421875 262144
+WARNING: Interaction between types 1 and 3 is set with deepmd, but will be ignored.
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/apps/deepmd/devel-dplr/source/lmp/pair_base.cpp:446)
+WARNING: Interaction between types 2 and 3 is set with deepmd, but will be ignored.
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/apps/deepmd/devel-dplr/source/lmp/pair_base.cpp:446)
+WARNING: Interaction between types 3 and 3 is set with deepmd, but will be ignored.
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/apps/deepmd/devel-dplr/source/lmp/pair_base.cpp:446)
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+WARNING: Neighbor exclusions used with KSpace solver may give inconsistent Coulombic energies (src/neighbor.cpp:654)
+Neighbor list info ...
+  update: every = 10 steps, delay = 0 steps, check = no
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 8
+  ghost atom cutoff = 8
+  binsize = 4, bins = 7 7 7
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair deepmd, perpetual
+      attributes: full, newton on
+      pair build: full/bin
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 46 | 46 | 46 Mbytes
+   Step          Temp          E_pair         E_mol          TotEng         Press     
+         0   300           -7477.9535      0             -7398.5748     -15512.225    
+        10   263.47173     -7487.2537      0             -7417.5403      34666.175    
+        20   259.64858     -7486.1834      0             -7417.4816     -16188.744    
+        30   286.72474     -7493.3446      0             -7417.4785      28954.372    
+        40   260.7351      -7486.5262      0             -7417.5368     -11742.169    
+        50   283.11198     -7492.5445      0             -7417.6344      21966.774    
+        60   259.41551     -7486.5915      0             -7417.9513     -3969.3456    
+        70   272.54938     -7490.3929      0             -7418.2776      16569.857    
+        80   251.56081     -7485.1545      0             -7418.5926      1588.3084    
+        90   267.54261     -7489.7685      0             -7418.978       10918.254    
+       100   263.45962     -7489.0276      0             -7419.3174      6859.7336    
+Loop time of 28.7526 on 1 procs for 100 steps with 2048 atoms
+
+Performance: 0.150 ns/day, 159.737 hours/ns, 3.478 timesteps/s, 7.123 katom-step/s
+101.2% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 10.78      | 10.78      | 10.78      |   0.0 | 37.49
+Bond    | 6.6911e-05 | 6.6911e-05 | 6.6911e-05 |   0.0 |  0.00
+Kspace  | 2.7022     | 2.7022     | 2.7022     |   0.0 |  9.40
+Neigh   | 0.1556     | 0.1556     | 0.1556     |   0.0 |  0.54
+Comm    | 0.0052091  | 0.0052091  | 0.0052091  |   0.0 |  0.02
+Output  | 0.01969    | 0.01969    | 0.01969    |   0.0 |  0.07
+Modify  | 15.088     | 15.088     | 15.088     |   0.0 | 52.48
+Other   |            | 0.001574   |            |       |  0.01
+
+Nlocal:           2048 ave        2048 max        2048 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           6892 ave        6892 max        6892 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:       364798 ave      364798 max      364798 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 364798
+Ave neighs/atom = 178.12402
+Ave special neighs/atom = 0.5
+Neighbor list builds = 10
+Dangerous builds not checked
+Total wall time: 0:00:30
