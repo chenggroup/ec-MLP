@@ -174,24 +174,11 @@ void VerletSplitDPLR::k2r_comm()
 {
 
 
-
+  if(force->kspace_match("pppm/dplr", 1) != nullptr) error->all(FLERR, "KSpace style pppm/dplr is not allowed with verlet/split/dplr. Use a compatible KSpace style instead (e.g., pppm)");  
   int n = 0;
   if (!master) n = atom->nlocal;
-  if(force->kspace_match("pppm/dplr", 1) != nullptr) {
-    PPPMDPLR *pppm_dplr = (PPPMDPLR *)force->kspace_match("pppm/dplr", 1);
-    double *fe = &pppm_dplr->get_fele()[0];
-    if (master) {
-      int nlocal = atom->nlocal;
-      for (int i = 0; i < nlocal * 3; i++) {
-        fe[i] = 0.0;
-      }
-    }
-    MPI_Gatherv(fe, n*3, MPI_DOUBLE, f_kspace[0], xsize, xdisp,
-              MPI_DOUBLE, 0, block);
-  }else{
   MPI_Gatherv(atom->f[0], n*3, MPI_DOUBLE, f_kspace[0], xsize, xdisp,
               MPI_DOUBLE, 0, block);
-  }
 
   // Set the forces to FixDPLR object
   auto fix_dplr_list = modify->get_fix_by_style("dplr");
@@ -206,11 +193,8 @@ void VerletSplitDPLR::k2r_comm()
       fix_dplr->dfele[i * 3 + 2] = f_kspace[i][2];
     }
   }else{
-      // modify self energy contribution
-      if(force->kspace_match("pppm/dplr", 1) == nullptr){
-        modify_dplr_self_energy_contribution(eflag);
-      
-      }
+    // modify self energy contribution
+    modify_dplr_self_energy_contribution(eflag);
   }
   if (eflag) MPI_Bcast(&force->kspace->energy, 1, MPI_DOUBLE, 1, block);
   if (vflag) MPI_Bcast(force->kspace->virial, 6, MPI_DOUBLE, 1, block);
