@@ -73,6 +73,14 @@ endif()
 include(${LAMMPS_SOURCE_DIR}/../cmake/Modules/LAMMPSUtils.cmake)
 get_lammps_version(${LAMMPS_SOURCE_DIR}/version.h LAMMPS_VERSION_NUMBER)
 
+# Debug logging to validate version number format
+message(STATUS "Original LAMMPS_VERSION_NUMBER: ${LAMMPS_VERSION_NUMBER}")
+
+# Fix version number with multiple decimal points by converting to a valid C++ number
+# Replace dots with nothing to create a numeric version like 2025072222
+string(REPLACE "." "" LAMMPS_VERSION_NUMBER_FIXED ${LAMMPS_VERSION_NUMBER})
+message(STATUS "Fixed LAMMPS_VERSION_NUMBER: ${LAMMPS_VERSION_NUMBER_FIXED}")
+
 set(libname "ecmlpplugin")
 file(GLOB LMP_SRC ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 find_package(DeePMD REQUIRED)
@@ -81,13 +89,16 @@ target_link_libraries(${libname} PRIVATE lammps)
 target_link_libraries(${libname} PUBLIC DeePMD::deepmd_c)
 target_include_directories(
   ${libname}
-  PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/..
-          ${LAMMPS_SOURCE_DIR} ${LAMMPS_SOURCE_DIR}/PLUGIN  
-          ${LAMMPS_SOURCE_DIR}/KSPACE ${LAMMPS_SOURCE_DIR}/ELECTRODE
+  PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+          ${CMAKE_CURRENT_SOURCE_DIR}/..
+          ${LAMMPS_SOURCE_DIR}
+          ${LAMMPS_SOURCE_DIR}/PLUGIN
+          ${LAMMPS_SOURCE_DIR}/KSPACE
+          ${LAMMPS_SOURCE_DIR}/ELECTRODE
           ${DEEPMD_SOURCE_DIR})
 set_target_properties(${libname} PROPERTIES PREFIX "" SUFFIX ".so")
 target_compile_definitions(
-  ${libname} PRIVATE "LAMMPS_VERSION_NUMBER=${LAMMPS_VERSION_NUMBER}")
+  ${libname} PRIVATE "LAMMPS_VERSION_NUMBER=${LAMMPS_VERSION_NUMBER_FIXED}")
 message("${LAMMPS_SOURCE_DIR}")
 
 # ##############################################################################
