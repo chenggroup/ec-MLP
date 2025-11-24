@@ -34,6 +34,7 @@ namespace LAMMPS_NS
 
   private:
     void k2r_comm() override;
+    void modify_dplr_self_energy_contribution(int);
   };
 
 } // namespace LAMMPS_NS

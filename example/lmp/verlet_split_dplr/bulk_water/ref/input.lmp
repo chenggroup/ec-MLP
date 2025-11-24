@@ -4,7 +4,7 @@ variable        BETA            equal 0.4
 variable        KMESH_X         equal 64
 variable        KMESH_Y         equal 64
 variable        KMESH_Z         equal 64
-variable        THERMO_FREQ     equal 10
+variable        THERMO_FREQ     equal 1
 variable        DUMP_FREQ       equal 10
 variable        TEMP            equal 300.000000
 variable        SEED            equal 1
@@ -19,13 +19,13 @@ restart         50000 system.restart
 # O H X
 mass            1 15.9994
 mass            2 1.008
-mass            3 1.008
+mass            3 0.0001
 
 group           real_atom type 1 2
 group           virtual_atom type 3
 
 neighbor        2.0 bin
-neigh_modify    every 10 delay 0 check no exclude group real_atom virtual_atom
+neigh_modify    every 1 delay 0 check no exclude group real_atom virtual_atom
 
 pair_style      deepmd ../graph.pb
 pair_coeff      * *
