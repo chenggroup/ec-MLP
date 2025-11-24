@@ -145,15 +145,15 @@ void VerletSplitDPLR::setup(int flag)
     if (fix_dplr_list.size() != 1) error->all(FLERR, "fix dplr should be used once");
     FixDPLR *fix_dplr = (FixDPLR *)fix_dplr_list[0];
 
-    if(force->kspace_match("pppm/dplr", 1) == nullptr) {
-      for (int i = 0; i < nlocal; i++) {
-        fix_dplr->dfele[i * 3 + 0] = atom->f[i][0] - tmp_f[i * 3 + 0];
-        fix_dplr->dfele[i * 3 + 1] = atom->f[i][1] - tmp_f[i * 3 + 1];
-        fix_dplr->dfele[i * 3 + 2] = atom->f[i][2] - tmp_f[i * 3 + 2];
-        atom->f[i][0] = tmp_f[i * 3 + 0];
-        atom->f[i][1] = tmp_f[i * 3 + 1];
-        atom->f[i][2] = tmp_f[i * 3 + 2];
-      }
+    if(force->kspace_match("pppm/dplr", 1) != nullptr) error->all(FLERR, "KSpace style pppm/dplr is not compatible with verlet/split/dplr. Use a compatible KSpace style instead (e.g., pppm)");
+
+    for (int i = 0; i < nlocal; i++) {
+      fix_dplr->dfele[i * 3 + 0] = atom->f[i][0] - tmp_f[i * 3 + 0];
+      fix_dplr->dfele[i * 3 + 1] = atom->f[i][1] - tmp_f[i * 3 + 1];
+      fix_dplr->dfele[i * 3 + 2] = atom->f[i][2] - tmp_f[i * 3 + 2];
+      atom->f[i][0] = tmp_f[i * 3 + 0];
+      atom->f[i][1] = tmp_f[i * 3 + 1];
+      atom->f[i][2] = tmp_f[i * 3 + 2];
     }
 
     modify->setup_pre_reverse(eflag,vflag);
@@ -173,8 +173,6 @@ void VerletSplitDPLR::setup(int flag)
 void VerletSplitDPLR::k2r_comm()
 {
 
-
-  if(force->kspace_match("pppm/dplr", 1) != nullptr) error->all(FLERR, "KSpace style pppm/dplr is not allowed with verlet/split/dplr. Use a compatible KSpace style instead (e.g., pppm)");
   int n = 0;
   if (!master) n = atom->nlocal;
   MPI_Gatherv(atom->f[0], n*3, MPI_DOUBLE, f_kspace[0], xsize, xdisp,
@@ -199,6 +197,11 @@ void VerletSplitDPLR::k2r_comm()
   if (eflag) MPI_Bcast(&force->kspace->energy, 1, MPI_DOUBLE, 1, block);
   if (vflag) MPI_Bcast(force->kspace->virial, 6, MPI_DOUBLE, 1, block);
 }
+
+/* ----------------------------------------------------------------------
+   self energy contribution
+------------------------------------------------------------------------- */
+
 void VerletSplitDPLR::modify_dplr_self_energy_contribution(int eflag)
 {
 
@@ -206,7 +209,6 @@ void VerletSplitDPLR::modify_dplr_self_energy_contribution(int eflag)
 
     KSpace* kspace_fast = force->kspace;
     if (!kspace_fast) return;
-
 
     double qsum_local = 0.0;
     double qsqsum_local = 0.0;

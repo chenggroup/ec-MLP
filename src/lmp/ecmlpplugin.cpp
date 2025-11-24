@@ -41,8 +41,8 @@ public:
         if (lmp->update->integrate_map->find(integrate_name) ==
             lmp->update->integrate_map->end()) {
           (*lmp->update->integrate_map)[integrate_name] =
-              (Update::IntegrateCreator)(
-                  lammpsplugin_factory2 *)&VerletSplitDplr_creator;
+              (Update::IntegrateCreator)(lammpsplugin_factory2
+                                             *)&VerletSplitDplr_creator;
         } else {
           error->all(FLERR,
                      "Integrate style %s already exists in integrate_map",
@@ -53,8 +53,8 @@ public:
         if (lmp->update->integrate_map->find(integrate_name) ==
             lmp->update->integrate_map->end()) {
           (*lmp->update->integrate_map)[integrate_name] =
-              (Update::IntegrateCreator)(
-                  lammpsplugin_factory2 *)&VerletSplitKSpace_creator;
+              (Update::IntegrateCreator)(lammpsplugin_factory2
+                                             *)&VerletSplitKSpace_creator;
         } else {
           error->all(FLERR,
                      "Integrate style %s already exists in integrate_map",
