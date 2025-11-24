@@ -13,9 +13,9 @@ git clone https://git.xmu.edu.cn/cheng-group/ec-MLP.git
 pip install ec-MLP[torch_admp]
 ```
 
-For testing, you might need to install additional dependencies via 
+For testing, you might need to install additional dependencies via
 
-```bash 
+```bash
 pip install ec-MLP[torch_admp,test]
 cd ec-MLP
 python -m unittest discover tests
@@ -31,7 +31,7 @@ For a LAMMPS interface, a patch should be applied to the source code of deepmd-k
 git clone -b v3.1.1 https://github.com/deepmodeling/deepmd-kit.git
 # add patch for fix dplr
 wget -c https://patch-diff.githubusercontent.com/raw/ChiahsinChu/deepmd-kit/pull/1.patch
-git am -3 1.patch 
+git am -3 1.patch
 # install deepmd-kit from src...
 ```
 
@@ -52,4 +52,4 @@ make
 
 ## Version compatibility
 
-This plugin is compatible with [DeepMD-kit v3.1.1](https://github.com/deepmodeling/deepmd-kit/releases/tag/v3.1.1) and [Lammps Stable release 22 July 2025](https://github.com/lammps/lammps/releases/tag/stable_22Jul2025). Older versions of both softwares do not work. 
+This plugin is compatible with [DeepMD-kit v3.1.1](https://github.com/deepmodeling/deepmd-kit/releases/tag/v3.1.1) and [Lammps Stable release 22 July 2025](https://github.com/lammps/lammps/releases/tag/stable_22Jul2025). Older versions of both softwares do not work.
