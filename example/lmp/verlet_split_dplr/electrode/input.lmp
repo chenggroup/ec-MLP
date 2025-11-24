@@ -32,8 +32,8 @@ mass            7 1.008
 mass            8 1.008
 
 group           real_atom type 1 2 3 4 5
-group           virtual_atom type 6 7 8 
-group           slab type 5 
+group           virtual_atom type 6 7 8
+group           slab type 5
 group           sol type 1 2 3 4
 
 neighbor        2.0 bin
@@ -41,7 +41,7 @@ neigh_modify    every 10 delay 0 check no exclude group sol virtual_atom
 
 pair_style      hybrid/scaled 1.0 deepmd graph.pb 0.0 lj/cut/coul/long/gauss 5.5
 pair_coeff      * * deepmd
-pair_coeff      * * lj/cut/coul/long/gauss 0.0 1.0 NULL 
+pair_coeff      * * lj/cut/coul/long/gauss 0.0 1.0 NULL
 pair_coeff      5 5 lj/cut/coul/long/gauss 0.0 1.0 ${ETA}
 
 bond_style      zero
@@ -52,8 +52,8 @@ kspace_style    pppm/electrode 1e-5
 kspace_modify   gewald ${BETA} diff ik mesh ${KMESH_X} ${KMESH_Y} ${KMESH_Z}
 
 fix             fdplr all dplr model graph.pb type_associate 1 6 3 7 4 8 bond_type 1
-fix             fconq slab electrode/conp ${SIGMA} pair lj/cut/coul/long/gauss 
-# fix             fconq slab electrode/conq ${SIGMA} ${ETA} 
+fix             fconq slab electrode/conp ${SIGMA} pair lj/cut/coul/long/gauss
+# fix             fconq slab electrode/conq ${SIGMA} ${ETA}
 fix             freeze slab setforce 0.0 0.0 0.0
 
 # compute the temperature of solution

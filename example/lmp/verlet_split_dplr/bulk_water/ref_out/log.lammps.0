@@ -1,7 +1,9 @@
-LAMMPS (29 Aug 2024 - Development - stable_11Aug2017-28076-gffdf4d35e5)
+LAMMPS (22 Jul 2025 - Update 2)
+Processor partition = 0
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread.
   using 1 OpenMP thread(s) per MPI task
-Loaded 1 plugins from /public/home/hans/app/deepmd-r3-electrode/deepmd-kit/build/deepmd_root/lib/deepmd_lmp
-Loaded 1 plugins from /public/home/hans/app/deepmd-r3-electrode/ec-MLP-devel-2-self/ec-MLP/src/lmp/build
+Loaded 1 plugins from /home/jxzhu/conda_script/deepmd-v3.1.1/deepmd-kit/build/deepmd_root/lib/deepmd_lmp
+Loaded 1 plugins from /home/jxzhu/conda_script/deepmd-v3.1.1/ec-MLP/src/lmp/build
 variable        NSTEPS          equal 100
 variable        DT              equal 0.0005
 variable        BETA            equal 0.4
@@ -36,8 +38,8 @@ Finding 1-2 1-3 1-4 neighbors ...
      0 = max # of 1-3 neighbors
      0 = max # of 1-4 neighbors
      1 = max # of special neighbors
-  special bonds CPU = 0.001 seconds
-  read_data CPU = 0.014 seconds
+  special bonds CPU = 0.000 seconds
+  read_data CPU = 0.006 seconds
 restart         50000 system.restart
 
 # O H X
@@ -53,36 +55,36 @@ group           virtual_atom type 3
 neighbor        2.0 bin
 neigh_modify    every 1 delay 0 check no exclude group real_atom virtual_atom
 
-pair_style      deepmd ../graph.pb
+pair_style      deepmd graph.pb
 Summary of lammps deepmd module ...
   >>> Info of deepmd-kit:
-  installed to:       /public/home/hans/app/deepmd-r3-electrode/deepmd-kit/build/deepmd_root
-  source:             v3.1.0-3-g3d439912
-  source branch:      devel
-  source commit:      3d439912
-  source commit at:   2025-06-26 11:33:42 +0800
+  installed to:       /home/jxzhu/conda_script/deepmd-v3.1.1/deepmd-kit/build/deepmd_root
+  source:             v3.1.1-1-g3f7330f8
+  source branch:      main
+  source commit:      3f7330f8
+  source commit at:   2025-11-24 17:16:04 +0800
   support model ver.: 1.1 
   build variant:      cuda
-  build with tf inc:  /public/home/hans/.conda/envs/deepmd-r3-electrode/lib/python3.11/site-packages/tensorflow/include;/public/home/hans/.conda/envs/deepmd-r3-electrode/lib/python3.11/site-packages/tensorflow/include
-  build with tf lib:  /public/home/hans/.conda/envs/deepmd-r3-electrode/lib/python3.11/site-packages/tensorflow/libtensorflow_cc.so.2
-  build with pt lib:  torch;torch_library;/public/home/hans/app/deepmd-r3-electrode/libtorch/lib/libc10.so;/public/home/hans/app/deepmd-r3-electrode/libtorch/lib/libkineto.a;/public/software/cuda/cuda-12.1/targets/x86_64-linux/lib/stubs/libcuda.so;/public/software/cuda/cuda-12.1/targets/x86_64-linux/lib/libnvrtc.so;/public/software/cuda/cuda-12.1/lib64/libnvToolsExt.so;/public/software/cuda/cuda-12.1/lib64/libcudart.so;/public/home/hans/app/deepmd-r3-electrode/libtorch/lib/libc10_cuda.so
+  build with tf inc:  /home/jxzhu/.local/lib/python3.10/site-packages/tensorflow/include;/home/jxzhu/.local/lib/python3.10/site-packages/tensorflow/include
+  build with tf lib:  /home/jxzhu/.local/lib/python3.10/site-packages/tensorflow/libtensorflow_cc.so.2
+  build with pt lib:  torch;torch_library;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib/libc10.so;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib/libkineto.a;/usr/local/cuda-12.4/targets/x86_64-linux/lib/stubs/libcuda.so;/usr/local/cuda-12.4/targets/x86_64-linux/lib/libnvrtc.so;/usr/local/cuda-12.4/lib64/libnvToolsExt.so;/usr/local/cuda-12.4/lib64/libcudart.so;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib/libc10_cuda.so
   set tf intra_op_parallelism_threads: 0
   set tf inter_op_parallelism_threads: 0
   >>> Info of lammps module:
-  use deepmd-kit at:  /public/home/hans/app/deepmd-r3-electrode/deepmd-kit/build/deepmd_root
-  source:             v3.1.0-3-g3d439912
-  source branch:      devel
-  source commit:      3d439912
-  source commit at:   2025-06-26 11:33:42 +0800
-  build with inc:     /public/home/hans/app/deepmd-r3-electrode/libtorch/include;/public/home/hans/app/deepmd-r3-electrode/libtorch/include/torch/csrc/api/include
-  build with lib:     /public/home/hans/.conda/envs/deepmd-r3-electrode/lib/python3.11/site-packages/tensorflow;/public/home/hans/app/deepmd-r3-electrode/libtorch/lib
+  use deepmd-kit at:  /home/jxzhu/conda_script/deepmd-v3.1.1/deepmd-kit/build/deepmd_root
+  source:             v3.1.1-1-g3f7330f8
+  source branch:      main
+  source commit:      3f7330f8
+  source commit at:   2025-11-24 17:16:04 +0800
+  build with inc:     /home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/include;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/include/torch/csrc/api/include
+  build with lib:     /home/jxzhu/.local/lib/python3.10/site-packages/tensorflow;/home/jxzhu/apps/libtorch/libtorch-cxx11-cuda12.4/lib
 pair_coeff      * *
 WARNING: Interaction between types 1 and 3 is set with deepmd, but will be ignored.
- Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/public/home/hans/app/deepmd-r3-electrode/deepmd-kit/source/lmp/pair_deepmd.cpp:884)
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/conda_script/deepmd-v3.1.1/deepmd-kit/source/lmp/pair_deepmd.cpp:884)
 WARNING: Interaction between types 2 and 3 is set with deepmd, but will be ignored.
- Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/public/home/hans/app/deepmd-r3-electrode/deepmd-kit/source/lmp/pair_deepmd.cpp:884)
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/conda_script/deepmd-v3.1.1/deepmd-kit/source/lmp/pair_deepmd.cpp:884)
 WARNING: Interaction between types 3 and 3 is set with deepmd, but will be ignored.
- Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/public/home/hans/app/deepmd-r3-electrode/deepmd-kit/source/lmp/pair_deepmd.cpp:884)
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/conda_script/deepmd-v3.1.1/deepmd-kit/source/lmp/pair_deepmd.cpp:884)
 
 bond_style      zero
 bond_coeff      *
@@ -94,7 +96,7 @@ Finding 1-2 1-3 1-4 neighbors ...
      1 = max # of special neighbors
   special bonds CPU = 0.000 seconds
 
-kspace_style    pppm/dplr 1e-5
+kspace_style    pppm 1e-5
 kspace_modify   gewald ${BETA} diff ik mesh ${KMESH_X} ${KMESH_Y} ${KMESH_Z}
 kspace_modify   gewald 0.4 diff ik mesh ${KMESH_X} ${KMESH_Y} ${KMESH_Z}
 kspace_modify   gewald 0.4 diff ik mesh 64 ${KMESH_Y} ${KMESH_Z}
@@ -107,15 +109,15 @@ velocity        all create 300 1
 velocity        all scale ${TEMP}
 velocity        all scale 300
 
-compute		real_temp real_atom temp
-fix		1 real_atom nvt temp ${TEMP} ${TEMP} $(100*dt)
-fix		1 real_atom nvt temp 300 ${TEMP} $(100*dt)
-fix		1 real_atom nvt temp 300 300 $(100*dt)
-fix		1 real_atom nvt temp 300 300 0.10000000000000000555
-fix_modify	1 temp real_temp
-WARNING: Temperature for fix modify is not for group all (src/fix_nh.cpp:1399)
+compute         real_temp real_atom temp
+fix             1 real_atom nvt temp ${TEMP} ${TEMP} $(100*dt)
+fix             1 real_atom nvt temp 300 ${TEMP} $(100*dt)
+fix             1 real_atom nvt temp 300 300 $(100*dt)
+fix             1 real_atom nvt temp 300 300 0.10000000000000000555
+fix_modify      1 temp real_temp
+WARNING: Temperature for fix modify is not for group all (src/fix_nh.cpp:1402)
 
-fix             fdplr all dplr model ../graph.pb type_associate 1 3 bond_type 1
+fix             fdplr all dplr model graph.pb type_associate 1 3 bond_type 1
 
 thermo          ${THERMO_FREQ}
 thermo          1
@@ -123,6 +125,10 @@ thermo          1
 dump            TRAJ real_atom custom ${DUMP_FREQ} dump.lammpstrj id element xu yu zu fx fy fz vx vy vz
 dump            TRAJ real_atom custom 10 dump.lammpstrj id element xu yu zu fx fy fz vx vy vz
 dump_modify     TRAJ element O H X sort id
+
+add_run_style   verlet/split/dplr
+Added run_style verlet/split/dplr successfully.
+run_style       verlet/split/dplr
 
 timestep        ${DT}
 timestep        0.0005
@@ -133,18 +139,6 @@ run             100
 CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
 
 Your simulation uses code contributions which should be cited:
-
-- Type Label Framework: https://doi.org/10.1021/acs.jpcb.3c08419
-
-@Article{Gissinger24,
- author = {Jacob R. Gissinger, Ilia Nikiforov, Yaser Afshar, Brendon Waters, Moon-ki Choi, Daniel S. Karls, Alexander Stukowski, Wonpil Im, Hendrik Heinz, Axel Kohlmeyer, and Ellad B. Tadmor},
- title = {Type Label Framework for Bonded Force Fields in LAMMPS},
- journal = {J. Phys. Chem. B},
- year =    2024,
- volume =  128,
- number =  13,
- pages =   {3282--3297}
-}
 
 - USER-DEEPMD package:
 
@@ -205,22 +199,22 @@ Your simulation uses code contributions which should be cited:
 CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE-CITE
 
 PPPM initialization ...
-  using 12-bit tables for long-range coulomb (src/kspace.cpp:342)
+  using 12-bit tables for long-range coulomb
   G vector (1/distance) = 0.4
   grid = 64 64 64
   stencil order = 5
   estimated absolute RMS force accuracy = 0.34534068
   estimated relative force accuracy = 0.023982583
-  using double precision FFTW3
+  using double precision KISS FFT
   3d grid and FFT values/proc = 421875 262144
 WARNING: Interaction between types 1 and 3 is set with deepmd, but will be ignored.
- Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/public/home/hans/app/deepmd-r3-electrode/deepmd-kit/source/lmp/pair_base.cpp:446)
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/conda_script/deepmd-v3.1.1/deepmd-kit/source/lmp/pair_base.cpp:446)
 WARNING: Interaction between types 2 and 3 is set with deepmd, but will be ignored.
- Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/public/home/hans/app/deepmd-r3-electrode/deepmd-kit/source/lmp/pair_base.cpp:446)
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/conda_script/deepmd-v3.1.1/deepmd-kit/source/lmp/pair_base.cpp:446)
 WARNING: Interaction between types 3 and 3 is set with deepmd, but will be ignored.
- Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/public/home/hans/app/deepmd-r3-electrode/deepmd-kit/source/lmp/pair_base.cpp:446)
+ Deepmd model has only 2 types, it only computes the mulitbody interaction of types: 1-2. (/home/jxzhu/conda_script/deepmd-v3.1.1/deepmd-kit/source/lmp/pair_base.cpp:446)
 Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
-WARNING: Neighbor exclusions used with KSpace solver may give inconsistent Coulombic energies (src/neighbor.cpp:658)
+WARNING: Neighbor exclusions used with KSpace solver may give inconsistent Coulombic energies (src/neighbor.cpp:671)
 Neighbor list info ...
   update: every = 1 steps, delay = 0 steps, check = no
   max neighbors/atom: 2000, page size: 100000
@@ -235,7 +229,7 @@ Neighbor list info ...
       bin: standard
 Per MPI rank memory allocation (min/avg/max) = 46 | 46 | 46 Mbytes
    Step          Temp          E_pair         E_mol          TotEng         Press     
-         0   300           -7477.9535      0             -7398.5748     -15512.225    
+         0   300           -177187.77      0             -177108.39     -15512.225    
          1   222.50749     -7477.6221      0             -7418.7476     -15556.234    
          2   220.2724      -7477.0288      0             -7418.7457     -11284.579    
          3   217.53144     -7476.2832      0             -7418.7253     -4626.345     
@@ -336,22 +330,22 @@ Per MPI rank memory allocation (min/avg/max) = 46 | 46 | 46 Mbytes
         98   258.62973     -7489.0984      0             -7420.6662      3017.6298    
         99   258.32911     -7489.0556      0             -7420.7029      4771.74      
        100   258.10792     -7489.0306      0             -7420.7364      6760.3718    
-Loop time of 8.13827 on 1 procs for 100 steps with 2048 atoms
+Loop time of 27.695 on 1 procs for 100 steps with 2048 atoms
 
-Performance: 0.531 ns/day, 45.213 hours/ns, 12.288 timesteps/s, 25.165 katom-step/s
-100.4% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 0.156 ns/day, 153.861 hours/ns, 3.611 timesteps/s, 7.395 katom-step/s
+101.2% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 1.0303     | 1.0303     | 1.0303     |   0.0 | 12.66
-Bond    | 0.00012823 | 0.00012823 | 0.00012823 |   0.0 |  0.00
-Kspace  | 2.8642     | 2.8642     | 2.8642     |   0.0 | 35.19
-Neigh   | 2.3094     | 2.3094     | 2.3094     |   0.0 | 28.38
-Comm    | 0.017304   | 0.017304   | 0.017304   |   0.0 |  0.21
-Output  | 0.038582   | 0.038582   | 0.038582   |   0.0 |  0.47
-Modify  | 1.8746     | 1.8746     | 1.8746     |   0.0 | 23.03
-Other   |            | 0.003751   |            |       |  0.05
+Pair    | 11.065     | 11.065     | 11.065     |   0.0 | 39.95
+Bond    | 0.0001485  | 0.0001485  | 0.0001485  |   0.0 |  0.00
+Kspace  | 0          | 0          | 0          |   0.0 |  0.00
+Neigh   | 1.5658     | 1.5658     | 1.5658     |   0.0 |  5.65
+Comm    | 0.026516   | 0.026516   | 0.026516   |   0.0 |  0.10
+Output  | 0.022018   | 0.022018   | 0.022018   |   0.0 |  0.08
+Modify  | 15.006     | 15.006     | 15.006     |   0.0 | 54.18
+Other   |            | 0.008787   |            |       |  0.03
 
 Nlocal:           2048 ave        2048 max        2048 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -367,4 +361,4 @@ Ave neighs/atom = 178.125
 Ave special neighs/atom = 0.5
 Neighbor list builds = 100
 Dangerous builds not checked
-Total wall time: 0:00:15
+Total wall time: 0:00:29

@@ -27,7 +27,7 @@ group           virtual_atom type 3
 neighbor        2.0 bin
 neigh_modify    every 1 delay 0 check no exclude group real_atom virtual_atom
 
-pair_style      deepmd ../graph.pb
+pair_style      deepmd graph.pb
 pair_coeff      * *
 
 bond_style      zero
@@ -44,7 +44,7 @@ compute         real_temp real_atom temp
 fix             1 real_atom nvt temp ${TEMP} ${TEMP} $(100*dt)
 fix_modify      1 temp real_temp
 
-fix             fdplr all dplr model ../graph.pb type_associate 1 3 bond_type 1
+fix             fdplr all dplr model graph.pb type_associate 1 3 bond_type 1
 
 thermo          ${THERMO_FREQ}
 

@@ -1,0 +1,4 @@
+LAMMPS (22 Jul 2025 - Update 2)
+Running on 2 partitions of processors
+Per-block Kspace/Rspace proc IDs (original proc IDs):
+  block 0: 1 2 0 (1 2 0)
