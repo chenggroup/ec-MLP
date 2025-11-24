@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-torch_admp = ["torch_admp @ git+https://github.com/chiahsinchu/torch-admp.git"]
+torch_admp = ["torch_admp @ git+https://github.com/chiahsinchu/torch-admp.git@v1.1.0a"]
 test = [
     "pytest",
     "pytest-cov",
