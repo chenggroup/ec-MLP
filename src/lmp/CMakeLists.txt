@@ -76,8 +76,8 @@ get_lammps_version(${LAMMPS_SOURCE_DIR}/version.h LAMMPS_VERSION_NUMBER)
 # Debug logging to validate version number format
 message(STATUS "Original LAMMPS_VERSION_NUMBER: ${LAMMPS_VERSION_NUMBER}")
 
-# Fix version number with multiple decimal points by converting to a valid C++ number
-# Replace dots with nothing to create a numeric version like 2025072222
+# Fix version number with multiple decimal points by converting to a valid C++
+# number Replace dots with nothing to create a numeric version like 2025072222
 string(REPLACE "." "" LAMMPS_VERSION_NUMBER_FIXED ${LAMMPS_VERSION_NUMBER})
 message(STATUS "Fixed LAMMPS_VERSION_NUMBER: ${LAMMPS_VERSION_NUMBER_FIXED}")
 
