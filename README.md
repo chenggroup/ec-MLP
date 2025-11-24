@@ -25,7 +25,6 @@ python -m unittest discover tests
 
 For a LAMMPS interface, a patch should be applied to the source code of deepmd-kit:
 
-
 ```bash
 # get deepmd-kit source code
 git clone -b v3.1.1 https://github.com/deepmodeling/deepmd-kit.git

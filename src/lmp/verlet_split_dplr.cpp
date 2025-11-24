@@ -47,8 +47,8 @@
 #include "pppm_dplr.h"
 
 using namespace LAMMPS_NS;
-using namespace MathConst;  
-using std::vector;          
+using namespace MathConst;
+using std::vector;
 
 /* ---------------------------------------------------------------------- */
 
@@ -63,12 +63,12 @@ void VerletSplitDPLR::setup(int flag)
 {
   if (comm->me == 0 && screen)
     fprintf(screen,"Setting up Verlet/split/dplr run ...\n");
-  
+
   int nlocal = atom->nlocal;
   if (!master) {
     force->kspace->setup();
   }
-  else 
+  else
   {
     if (comm->me == 0 && screen) {
       fputs("Setting up Verlet run ...\n",screen);
@@ -138,7 +138,7 @@ void VerletSplitDPLR::setup(int flag)
       if (kspace_compute_flag) force->kspace->compute(eflag,vflag);
       else force->kspace->compute_dummy(eflag,vflag);
     }
-    
+
     // update fix_dplr->dfele based on kspace force
     // reset atom->f to the values without kspace contribution
     auto fix_dplr_list = modify->get_fix_by_style("dplr");
@@ -161,7 +161,7 @@ void VerletSplitDPLR::setup(int flag)
     modify->setup(vflag);
     output->setup(flag);
     update->setupflag = 0;
-  
+
   };
 
 }
@@ -174,7 +174,7 @@ void VerletSplitDPLR::k2r_comm()
 {
 
 
-  if(force->kspace_match("pppm/dplr", 1) != nullptr) error->all(FLERR, "KSpace style pppm/dplr is not allowed with verlet/split/dplr. Use a compatible KSpace style instead (e.g., pppm)");  
+  if(force->kspace_match("pppm/dplr", 1) != nullptr) error->all(FLERR, "KSpace style pppm/dplr is not allowed with verlet/split/dplr. Use a compatible KSpace style instead (e.g., pppm)");
   int n = 0;
   if (!master) n = atom->nlocal;
   MPI_Gatherv(atom->f[0], n*3, MPI_DOUBLE, f_kspace[0], xsize, xdisp,
@@ -184,7 +184,7 @@ void VerletSplitDPLR::k2r_comm()
   auto fix_dplr_list = modify->get_fix_by_style("dplr");
   if (fix_dplr_list.size() != 1) error->all(FLERR, "fix dplr should be used once");
   FixDPLR *fix_dplr = (FixDPLR *)fix_dplr_list[0];
-  
+
   if (master) {
     int nlocal = atom->nlocal;
     for (int i = 0; i < nlocal; i++) {
@@ -201,13 +201,13 @@ void VerletSplitDPLR::k2r_comm()
 }
 void VerletSplitDPLR::modify_dplr_self_energy_contribution(int eflag)
 {
-  
+
   if (eflag & ENERGY_GLOBAL) {
-    
+
     KSpace* kspace_fast = force->kspace;
     if (!kspace_fast) return;
 
-    
+
     double qsum_local = 0.0;
     double qsqsum_local = 0.0;
 
@@ -236,15 +236,15 @@ void VerletSplitDPLR::modify_dplr_self_energy_contribution(int eflag)
     double slab_volfactor = kspace_fast->slab_volfactor;
     double zprd_slab = zprd * slab_volfactor;
     double volume = xprd * yprd * zprd_slab;
-    
+
     // Test: which situations  scale != 1
     double scale = 1;
     double qscale = force->qqrd2e * scale;
 
     double self_energy = (g_ewald*qsqsum/MY_PIS +
                          MY_PI2*qsum*qsum/(g_ewald*g_ewald*volume)) * qscale;
-    
-    //force->kspace->energy 
+
+    //force->kspace->energy
     force->kspace->energy += self_energy;
   }
 }

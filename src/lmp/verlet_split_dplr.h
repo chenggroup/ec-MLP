@@ -23,19 +23,17 @@ IntegrateStyle(verlet/split/dplr,VerletSplitDPLR);
 
 #include "verlet_split_kspace.h"
 
-namespace LAMMPS_NS
-{
+namespace LAMMPS_NS {
 
-  class VerletSplitDPLR : public VerletSplitKSpace
-  {
-  public:
-    VerletSplitDPLR(class LAMMPS *, int, char **);
-    void setup(int) override;
+class VerletSplitDPLR : public VerletSplitKSpace {
+public:
+  VerletSplitDPLR(class LAMMPS *, int, char **);
+  void setup(int) override;
 
-  private:
-    void k2r_comm() override;
-    void modify_dplr_self_energy_contribution(int);
-  };
+private:
+  void k2r_comm() override;
+  void modify_dplr_self_energy_contribution(int);
+};
 
 } // namespace LAMMPS_NS
 
