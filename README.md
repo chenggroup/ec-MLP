@@ -49,6 +49,13 @@ cmake -DLAMMPS_SOURCE_DIR=$LAMMPS_PREFIX/src \
 make
 ```
 
+For testing:
+
+```bash
+cd ec-MLP/tests/lmp
+bash run_all_tests.sh
+```
+
 ## Version compatibility
 
 This plugin is compatible with [DeepMD-kit v3.1.1](https://github.com/deepmodeling/deepmd-kit/releases/tag/v3.1.1) and [Lammps Stable release 22 July 2025](https://github.com/lammps/lammps/releases/tag/stable_22Jul2025). Older versions of both softwares do not work.
