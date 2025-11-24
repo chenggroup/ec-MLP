@@ -26,17 +26,15 @@ def parse_lammps_thermo(log_file):
 
 
 for atoms_ref, atoms_test in zip(
-    io.iread("ref/ref_out/dump.lammpstrj"), io.iread("test/ref_out/dump.lammpstrj")
+    io.iread("ref/dump.lammpstrj"), io.iread("test/dump.lammpstrj")
 ):
     assert np.allclose(atoms_ref.get_positions(), atoms_test.get_positions())
     assert np.allclose(atoms_ref.get_forces(), atoms_test.get_forces())
 
-ref_data = parse_lammps_thermo("ref/ref_out/log.lammps")[1:]  # skip first data point
-test_data = parse_lammps_thermo("test/ref_out/log.lammps.0")[
-    1:
-]  # skip first data point
+ref_data = parse_lammps_thermo("ref/log.lammps")[1:]  # skip first data point
+test_data = parse_lammps_thermo("test/log.lammps.0")[1:]  # skip first data point
 
 assert np.allclose(ref_data[:, 0], test_data[:, 0])  # TotEng
 assert np.allclose(ref_data[:, 1], test_data[:, 1])  # Press
 
-print("All tests passed!")
+# print("All tests passed!")
