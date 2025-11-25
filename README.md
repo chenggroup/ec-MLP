@@ -59,3 +59,12 @@ bash run_all_tests.sh
 ## Version compatibility
 
 This plugin is compatible with [DeepMD-kit v3.1.1](https://github.com/deepmodeling/deepmd-kit/releases/tag/v3.1.1) and [Lammps Stable release 22 July 2025](https://github.com/lammps/lammps/releases/tag/stable_22Jul2025). Older versions of both softwares do not work.
+
+## Documentation
+
+The complete documentation for ec-MLP is available at:
+
+- **Live documentation**: [https://chiahsinchu.github.io/ec-MLP/](https://chiahsinchu.github.io/ec-MLP/)
+- **Documentation source**: See the [`doc/`](./doc/) directory
+
+The documentation is automatically built and deployed to GitHub Pages using GitHub Actions. For more details on building documentation locally or contributing to the documentation, see [`doc/README.md`](./doc/README.md).
