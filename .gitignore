@@ -210,7 +210,6 @@ cython_debug/
 .vscode/
 
 _version.py
+*.bib.original
 
 example/
-
-source/tests
