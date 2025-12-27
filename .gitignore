@@ -209,6 +209,8 @@ cython_debug/
 .DS_Store
 .vscode/
 
+_version.py
+
 example/
 
 source/tests

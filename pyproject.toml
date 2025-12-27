@@ -1,14 +1,18 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
 [build-system]
-requires = ["setuptools>=42", "wheel"]
+requires = [
+    "setuptools>=45",
+    "wheel",
+    "setuptools_scm[toml]>=6.2",
+    "hatch-fancy-pypi-readme",
+]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "ec_mlp"
-version = "1.0"
+dynamic = ["version", "readme"]
 description = "ec-MLP: Machine Learning Potential for ElectroChemistry"
-readme = "README.md"
 license = { file = ".license-header.txt" }
 dependencies = [
     "deepmd-kit>=3.0.0",
@@ -51,4 +55,18 @@ modifier_dipole_charge_electrode = "ec_mlp.tf.modifier.dipole_charge_electrode:D
 # https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["ec_mlp"]
+include = ["ec_mlp*"]
+
+[tool.setuptools_scm]
+write_to = "src/ec_mlp/_version.py"
+version_scheme = "release-branch-semver"
+local_scheme = "node-and-date"
+
+[tool.setuptools.dynamic]
+readme = {file = "README.md", content-type = "text/markdown"}
+
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "README.md"
