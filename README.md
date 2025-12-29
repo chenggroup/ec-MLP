@@ -1,6 +1,6 @@
 # README
 
-[![CI](https://github.com/chenggroup/ec-MLP/actions/workflows/ci.yml/badge.svg)](https://github.com/chenggroup/ec-MLP/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/chenggroup/ec-MLP/graph/badge.svg?token=742UjFq34v)](https://codecov.io/gh/chenggroup/ec-MLP)
+[![Test Python](https://github.com/chenggroup/ec-MLP/actions/workflows/test_python.yml/badge.svg)](https://github.com/chenggroup/ec-MLP/actions/workflows/test_python.yml) [![codecov](https://codecov.io/gh/chenggroup/ec-MLP/graph/badge.svg?token=742UjFq34v)](https://codecov.io/gh/chenggroup/ec-MLP)
 
 DeepMD-kit plugin for ElectroChemical interfaces simulations.
 
