@@ -25,5 +25,5 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         with:
-          source-repo: "git@github.com:ChiahsinChu/ec-MLP.git"
-          destination-repo: "git@gitee.com:chiahsinchu/ec-MLP.git"
+          source-repo: "git@github.com:${{ github.repository }}.git"
+          destination-repo: "git@gitee.com:${{ github.repository_owner }}/ec-MLP.git"

@@ -2,51 +2,53 @@
   "model": {
     "type_map": [
       "O",
-      "H"
+      "H",
+      "K",
+      "F",
+      "Pt"
     ],
     "descriptor": {
-      "type": "se_e2_a",
-      "sel": [
-        46,
-        92
-      ],
+      "type": "se_a",
       "rcut_smth": 0.5,
-      "rcut": 6.0,
+      "rcut": 3.0,
       "neuron": [
-        16,
-        32,
-        64
+        25,
+        50,
+        100
       ],
       "resnet_dt": false,
-      "axis_neuron": 8,
-      "type_one_side": true,
-      "precision": "float64",
-      "seed": 3458359619,
-      "_comment2": " that's all"
+      "axis_neuron": 16,
+      "seed": 1
     },
     "fitting_net": {
       "neuron": [
-        128,
-        128,
-        128
+        32,
+        32,
+        32
       ],
       "resnet_dt": true,
       "precision": "float64",
-      "seed": 108835393,
+      "seed": 1,
       "_comment3": " that's all"
     },
     "modifier": {
-      "type": "dipole_charge_beta",
-      "model_name": "dw.pb",
+      "type": "dipole_charge_electrode",
+      "model_name": "dw_model.pb",
       "model_charge_map": [
+        -8,
+        -8,
         -8
       ],
       "sys_charge_map": [
         6,
-        1
+        1,
+        9,
+        7,
+        0
       ],
-      "ewald_h": 1.0,
-      "ewald_beta": 0.4
+      "ewald_h": 2.0,
+      "ewald_beta": 1.0,
+      "eta": 1.979
     },
     "_comment4": " that's all"
   },
@@ -79,7 +81,7 @@
       "_comment7": "that's all"
     },
     "numb_steps": 10,
-    "seed": 4266336533,
+    "seed": 1,
     "disp_file": "lcurve.out",
     "disp_freq": 10,
     "save_freq": 50,

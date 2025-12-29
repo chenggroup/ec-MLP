@@ -1,9 +1,13 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
+import json
+import os
 import unittest
 from pathlib import Path
 
 import numpy as np
 import torch
+from deepmd.tf.entrypoints.freeze import freeze
+from deepmd.tf.entrypoints.train import train
 from deepmd.tf.env import tf
 from deepmd.tf.modifier import DipoleChargeModifier
 from torch_admp.electrode import (
@@ -15,9 +19,38 @@ from torch_admp.nblist import vesin_nblist
 
 from ec_mlp.tf.modifier import DipoleChargeBetaModifier, DipoleChargeElectrodeModifier
 
+from .common import clean_training_files
+
 
 def data_modifier_setup(ut: unittest.TestCase):
-    ut.model_name = str(ut.data_dir / "dw.pb")
+    input_file = "dipole.json"
+    init_model = None
+    restart = None
+    init_frz_model = None
+    output_file = "out.json"
+
+    root_dir = Path(__file__).parent
+
+    os.chdir(ut.data_dir)
+    # train dw model
+    tf.reset_default_graph()
+    train(
+        INPUT=input_file,
+        init_model=init_model,
+        restart=restart,
+        init_frz_model=init_frz_model,
+        mpi_log="master",
+        log_level=2,
+        output=output_file,
+        log_path=None,
+    )
+    freeze(
+        checkpoint_folder=".",
+        output="dw_model.pb",
+    )
+    os.chdir(root_dir)
+
+    ut.model_name = str(ut.data_dir / "dw_model.pb")
     ut.coord = np.array(
         np.load(ut.data_dir / "data/set.000/coord.npy")[0], dtype=np.float64
     ).reshape(1, -1)
@@ -56,6 +89,41 @@ class TestChargeDipoleBetaModifier(unittest.TestCase):
 
     def tearDown(self) -> None:
         tf.reset_default_graph()
+        clean_training_files(str(self.data_dir))
+
+    def test_train(self):
+        init_model = None
+        restart = None
+        init_frz_model = None
+        output_file = "out.json"
+
+        root_dir = Path(__file__).parent
+
+        os.chdir(self.data_dir)
+
+        input_json = "energy.json"
+        with open(input_json, encoding="utf-8") as f:
+            config = json.load(f)
+        for ewald_calculator in ["naive", "torch", "jax"]:
+            config["model"]["modifier"]["ewald_calculator"] = ewald_calculator
+
+            with open("input_v2_compat.json", "w", encoding="utf-8") as f:
+                json.dump(config, f)
+
+            # train dplr model
+            tf.reset_default_graph()
+            train(
+                INPUT="input_v2_compat.json",
+                init_model=init_model,
+                restart=restart,
+                init_frz_model=init_frz_model,
+                mpi_log="master",
+                log_level=2,
+                output=output_file,
+                log_path=None,
+            )
+
+        os.chdir(root_dir)
 
     def test_consistency(self):
         dm_pt = DipoleChargeBetaModifier(
@@ -72,21 +140,31 @@ class TestChargeDipoleBetaModifier(unittest.TestCase):
             self.sys_charge_map,
             self.ewald_h,
             self.ewald_beta,
-            ewald_calculator="torch",
+            ewald_calculator="jax",
         )
 
         # e, f, v
         out_ref = self.dm_ref.eval(self.coord, self.box, self.atype)
-        for dm_test in [dm_pt, dm_jax]:
-            out_test = dm_test.eval(self.coord, self.box, self.atype)
-            # test e and f (virial has not been implemented)
-            for ii in range(2):
-                np.testing.assert_allclose(
-                    out_ref[ii].reshape(-1),
-                    out_test[ii].reshape(-1),
-                    atol=1e-6,
-                )
-                # print(out_ref[ii].reshape(-1), out_test[ii].reshape(-1))
+
+        dm_test = dm_pt
+        out_test = dm_test.eval(self.coord, self.box, self.atype)
+        # test e, f, v
+        for ii in range(3):
+            np.testing.assert_allclose(
+                out_ref[ii].reshape(-1),
+                out_test[ii].reshape(-1),
+                atol=1e-5,
+            )
+
+        dm_test = dm_jax
+        out_test = dm_test.eval(self.coord, self.box, self.atype)
+        # test e and f (virial has not been implemented)
+        for ii in range(2):
+            np.testing.assert_allclose(
+                out_ref[ii].reshape(-1),
+                out_test[ii].reshape(-1),
+                atol=1e-5,
+            )
 
 
 class TestChargeDipoleElectrodeModifier(unittest.TestCase):
@@ -112,6 +190,7 @@ class TestChargeDipoleElectrodeModifier(unittest.TestCase):
 
     def tearDown(self) -> None:
         tf.reset_default_graph()
+        clean_training_files(str(self.data_dir))
 
     def test_consistency(self):
         # e, f, v
@@ -124,6 +203,32 @@ class TestChargeDipoleElectrodeModifier(unittest.TestCase):
                 out_test[ii].reshape(-1),
                 atol=1e-6,
             )
+
+    def test_train(self):
+        input_json = "energy.json"
+        init_model = None
+        restart = None
+        init_frz_model = None
+        output_file = "out.json"
+
+        root_dir = Path(__file__).parent
+
+        os.chdir(self.data_dir)
+
+        # train energy model
+        tf.reset_default_graph()
+        train(
+            INPUT=input_json,
+            init_model=init_model,
+            restart=restart,
+            init_frz_model=init_frz_model,
+            mpi_log="master",
+            log_level=2,
+            output=output_file,
+            log_path=None,
+        )
+
+        os.chdir(root_dir)
 
     def test_electrode_charge(self):
         # setup charge

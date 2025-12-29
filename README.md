@@ -1,5 +1,7 @@
 # README
 
+[![CI](https://github.com/chenggroup/ec-MLP/actions/workflows/ci.yml/badge.svg)](https://github.com/chenggroup/ec-MLP/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/chenggroup/ec-MLP/graph/badge.svg?token=742UjFq34v)](https://codecov.io/gh/chenggroup/ec-MLP)
+
 DeepMD-kit plugin for ElectroChemical interfaces simulations.
 
 ## Installation
@@ -9,14 +11,14 @@ DeepMD-kit plugin for ElectroChemical interfaces simulations.
 After installing deepmd-kit (python interface), the plugin for python interface can be installed by:
 
 ```bash
-git clone https://git.xmu.edu.cn/cheng-group/ec-MLP.git
-pip install ec-MLP[torch_admp]
+git clone https://github.com/chenggroup/ec-MLP.git
+pip install ec-MLP[ec-MLP]
 ```
 
 For testing, you might need to install additional dependencies via
 
 ```bash
-pip install ec-MLP[torch_admp,test]
+pip install ec-MLP[ec-MLP,test]
 cd ec-MLP
 python -m unittest discover tests
 ```
@@ -64,7 +66,7 @@ This plugin is compatible with [DeepMD-kit v3.1.1](https://github.com/deepmodeli
 
 The complete documentation for ec-MLP is available at:
 
-- **Live documentation**: [https://chiahsinchu.github.io/ec-MLP/](https://chiahsinchu.github.io/ec-MLP/)
-- **Documentation source**: See the [`doc/`](./doc/) directory
+- [**Live documentation**](https://wiki.cheng-group.net/ec-MLP/)
+- [**Documentation source**](./doc/)
 
 The documentation is automatically built and deployed to GitHub Pages using GitHub Actions. For more details on building documentation locally or contributing to the documentation, see [`doc/README.md`](./doc/README.md).

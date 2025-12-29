@@ -2,7 +2,7 @@
 import warnings
 
 import numpy as np
-from deepmd.pt.utils.utils import to_numpy_array
+from deepmd.pt.utils.utils import to_numpy_array, to_torch_tensor
 from deepmd.tf.common import select_idx_map
 from deepmd.tf.infer.ewald_recp import EwaldRecp
 from deepmd.tf.modifier.base_modifier import BaseModifier
@@ -95,54 +95,69 @@ class DipoleChargeBetaModifier(DipoleChargeModifier):
 
     def _eval_ewald_jax(
         self,
-        positions: np.ndarray,
-        charges: np.ndarray,
-        box: np.ndarray,
+        _positions: np.ndarray,
+        _charges: np.ndarray,
+        _box: np.ndarray,
     ):
         j2ev = constants.physical_constants["joule-electron volt relationship"][0]
         # kJ/mol to eV/particle
         energy_coeff = j2ev * constants.kilo / constants.Avogadro
+
+        _box = _box.reshape(3, 3)
+        box = jnp.array(_box)
+        frac_positions = jnp.matmul(
+            _positions.reshape(-1, 3),
+            jnp.linalg.inv(box),
+        )
+        detached_frac_positions = jax.lax.stop_gradient(frac_positions)
+        positions = jnp.matmul(detached_frac_positions, box)
+        charges = jnp.array(_charges.reshape(-1, 1))
 
         pme_recip_fn = generate_pme_recip(
             Ck_fn=Ck_1,
             kappa=self.ewald_beta,
             gamma=False,
             pme_order=6,
-            K1=int(box[0, 0] / self.ewald_h),
-            K2=int(box[1, 1] / self.ewald_h),
-            K3=int(box[2, 2] / self.ewald_h),
+            K1=int(_box[0, 0] / self.ewald_h),
+            K2=int(_box[1, 1] / self.ewald_h),
+            K3=int(_box[2, 2] / self.ewald_h),
             lmax=0,
         )
-        positions = jnp.array(positions.reshape(-1, 3))
-        box = jnp.array(box.reshape(3, 3))
-        charges = jnp.array(charges.reshape(-1, 1))
+
         e = pme_recip_fn(positions, box, charges) * energy_coeff
-        _f, v = jax.grad(pme_recip_fn, argnums=(0, 1))(positions, box, charges)
+        _f, _v = jax.grad(pme_recip_fn, argnums=(0, 1))(positions, box, charges)
         f = -_f * energy_coeff
-        v = -v * energy_coeff
-        return e, f, box.reshape(3, 3).T @ v
+        v = -jnp.matmul(_v.transpose(1, 0), box) * energy_coeff
+        return e, f, v
 
     def _eval_ewald_torch(
         self,
-        positions: np.ndarray,
-        charges: np.ndarray,
-        box: np.ndarray,
+        _positions: np.ndarray,
+        _charges: np.ndarray,
+        _box: np.ndarray,
     ):
         slab_factor = 3.0
         if self.slab_corr:
-            box = box.reshape(3, 3)
-            box[2, 2] *= slab_factor
+            _box = _box.reshape(3, 3)
+            _box[2, 2] *= slab_factor
 
-        t_positions = torch.tensor(positions.reshape(-1, 3), requires_grad=True)
-        t_box = torch.tensor(box.reshape(3, 3), requires_grad=True)
-        t_charges = torch.tensor(charges.reshape(-1))
+        box = to_torch_tensor(_box).reshape(3, 3)
+        box.requires_grad_(True)
+        frac_positions = torch.matmul(
+            to_torch_tensor(_positions).reshape(-1, 3),
+            torch.linalg.inv(box),
+        )
+        detached_frac_positions = frac_positions.detach()
+        positions = torch.matmul(detached_frac_positions, box)
+        charges = torch.reshape(to_torch_tensor(_charges), (-1,))
+
         self.er(
-            t_positions,
-            t_box,
+            positions,
+            box,
             self.placeholder_pairs,
             self.placeholder_ds,
             self.placeholder_buffer_scales,
-            {"charge": t_charges},
+            {"charge": charges},
         )
 
         e = (
@@ -150,12 +165,14 @@ class DipoleChargeBetaModifier(DipoleChargeModifier):
             + self.er.non_neutral_energy
             + self.er.slab_corr_energy
         )
-        f = -calc_grads(e, t_positions)
-        v = -calc_grads(e, t_box)
+        f = -calc_grads(e, positions)
+        v = calc_grads(e, box)
+        v = -torch.matmul(v.transpose(1, 0), box)
+
         return (
             to_numpy_array(e),
             to_numpy_array(f),
-            box.reshape(3, 3).T @ to_numpy_array(v),
+            to_numpy_array(v),
         )
 
     def eval(
@@ -301,10 +318,6 @@ class DipoleChargeBetaModifier(DipoleChargeModifier):
             and "find_virial" not in data
         ):
             return
-
-        if self.ewald_calculator != "naive":
-            if "find_virial" in data and data["find_virial"] == 1.0:
-                raise RuntimeError("Virial is not supported")
 
         get_nframes = None
         coord = data["coord"][:get_nframes, :]
