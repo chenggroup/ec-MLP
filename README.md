@@ -12,15 +12,15 @@ After installing deepmd-kit (python interface), the plugin for python interface 
 
 ```bash
 git clone https://github.com/chenggroup/ec-MLP.git
-pip install ec-MLP[ec-MLP]
+pip install ec-MLP[torch_admp]
 ```
 
 For testing, you might need to install additional dependencies via
 
 ```bash
-pip install ec-MLP[ec-MLP,test]
+pip install ec-MLP[torch_admp,test]
 cd ec-MLP
-python -m unittest discover tests
+python -m pytest tests
 ```
 
 ### Lammps interface
